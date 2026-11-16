@@ -1,0 +1,2 @@
+# Required only for S3 inputs, snapshots, outputs, or database artifacts.
+boto3>=1.34,<2

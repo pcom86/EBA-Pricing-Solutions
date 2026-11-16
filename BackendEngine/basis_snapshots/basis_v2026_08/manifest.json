@@ -1,0 +1,53 @@
+{
+  "version": "basis_v2026_08",
+  "stage": "MASTER",
+  "promoted_at": "2026-07-23T13:50:16Z",
+  "promoted_from": "basis_v2026_08_DEV",
+  "carried_from": "basis_v2026_07",
+  "built_at": "2026-07-23T13:50:16Z",
+  "source_sha256": "N/A_TT_locked",
+  "tables": {
+    "tip_annuity_factors": {
+      "rows": 30521,
+      "cols": 12,
+      "source_sha256": "e58abfe6688fdce18f9204b44dedf0c6830bf2b641e2eac16e9bf3333d3d2291",
+      "built_at": "20260727_144523",
+      "origin": "tip_additive_promotion"
+    },
+    "tip_payment_period_map": {
+      "rows": 30,
+      "cols": 7,
+      "source_sha256": "2ed6490b14f214a17159920fd38151053d15af3d8fd49126c711b285324b8363",
+      "built_at": "20260727_144523",
+      "origin": "tip_additive_promotion"
+    },
+    "tip_age_interp": {
+      "rows": 47,
+      "cols": 5,
+      "source_sha256": "b3e3872b94d170fe652ceb801f62867fe43132be7c23053013239f5016f54cdf",
+      "built_at": "20260727_144523",
+      "origin": "tip_additive_promotion"
+    },
+    "tip_esc_loading": {
+      "rows": 17,
+      "cols": 7,
+      "source_sha256": "60279d13314569f8aec5b38df5493c112b1fb1568a1c2f286269b240b731649e",
+      "built_at": "20260727_144523",
+      "origin": "tip_additive_promotion"
+    },
+    "tip_wp_ann_map": {
+      "rows": 14,
+      "cols": 3,
+      "source_sha256": "c72ab4a1eb94da442f0de962a1ecfbb77e11f5f19bee4b85e28773ce562c8f31",
+      "built_at": "20260727_144523",
+      "origin": "tip_additive_promotion"
+    },
+    "tip_db_loading": {
+      "rows": 5,
+      "cols": 3,
+      "source_sha256": "440ccc0c49d2701bd9d6439419e2ff81af222b4805bc62c59c1b49f8eddb0b82",
+      "built_at": "20260727_144523",
+      "origin": "tip_additive_promotion"
+    }
+  }
+}

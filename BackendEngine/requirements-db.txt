@@ -1,0 +1,2 @@
+# Optional database loading; the image also needs the appropriate native ODBC driver.
+pyodbc==5.3.0

@@ -1,0 +1,23 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/assumption_snapshots/Archive
+/basis_snapshots/Archive
+/ctr_loader/Archive
+/pricing_engine/Archive
+/gap_pricing_gui/Archive
+/basis_snapshots/basis_v2026_08/Archive
+/basis_master_files/Archive
+/assumption_snapshots/assumption_A2026_08/_backups
+/assumption_master_files/Archive
+/reporting/Archive
+/reporting/__pycache__
+/.vs
+/1Not important
+/local_s3_bucket
+/pricing_engine/_verification/__pycache__
+/pricing_engine/__pycache__
+/gap_pricing_gui/__pycache__
+/gap_config/__pycache__
+/ctr_loader/__pycache__

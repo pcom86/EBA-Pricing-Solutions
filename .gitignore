@@ -1,0 +1,72 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+# Existing project-specific cache exclusions
+/Frontend/gap_pricing_gui/__pycache__
+/.vs
+/gap_pricing_gui/__pycache__/batch_detail_dialog.cpython-310.pyc
+/gap_pricing_gui/__pycache__/category_split_bar.cpython-310.pyc
+/gap_pricing_gui/__pycache__/config.cpython-310.pyc
+/gap_pricing_gui/__pycache__/batch_detail_dialog.cpython-310.pyc
+/gap_pricing_gui/__pycache__/category_split_bar.cpython-310.pyc
+/gap_pricing_gui/__pycache__/config.cpython-310.pyc
+/pricing_engine/__pycache__/async_state.cpython-310.pyc
+/pricing_engine/__pycache__/concurrent_runner.cpython-310.pyc
+/pricing_engine/__pycache__/engine.cpython-310.pyc
+/pricing_engine/__pycache__/engine_paths.cpython-310.pyc
+/pricing_engine/__pycache__/helpers.cpython-310.pyc
+/pricing_engine/__pycache__/helpers_common.cpython-310.pyc
+/pricing_engine/__pycache__/helpers_education.cpython-310.pyc
+/pricing_engine/__pycache__/helpers_fc.cpython-310.pyc
+/pricing_engine/__pycache__/helpers_gip.cpython-310.pyc
+/pricing_engine/__pycache__/helpers_gla.cpython-310.pyc
+/pricing_engine/__pycache__/helpers_tip.cpython-310.pyc
+/pricing_engine/__pycache__/recipes.cpython-310.pyc
+
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python caches and bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Build / packaging artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# Coverage reports
+.coverage
+.coverage.*
+htmlcov/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local runtime output files that are usually generated
+launch_gap_gui.log
+/BackendEngine/pricing_output/

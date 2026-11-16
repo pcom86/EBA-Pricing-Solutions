@@ -1,0 +1,9 @@
+{
+  "version": "assumption_A2026_08",
+  "stage": "MASTER",
+  "promoted_at": "2026-07-23T13:50:16Z",
+  "promoted_from": "assumption_A2026_08_DEV",
+  "carried_from": "assumption_A2026_07",
+  "built_at": "2026-07-23T13:50:16Z",
+  "source_sha256": "N/A_TT_locked"
+}

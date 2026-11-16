@@ -1,0 +1,20 @@
+# Allowlist: never send runtime data, secrets, notebooks or Git history to Docker.
+**
+!Dockerfile
+!.dockerignore
+!config.json
+!gap_config/
+!gap_config/**/*.py
+!gap_pricing_gui/
+!gap_pricing_gui/**/*.py
+!gap_pricing_gui/requirements.txt
+!pricing_engine/
+!pricing_engine/**/*.py
+!ctr_loader/
+!ctr_loader/**/*.py
+!reporting/
+!reporting/**/*.py
+!tests/
+!tests/**/*.py
+**/__pycache__/**
+**/*.pyc

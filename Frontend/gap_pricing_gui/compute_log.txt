@@ -1,0 +1,185 @@
+2026-07-31 11:55:05  COLD  price_quote=1.372s  scheme=Amazon
+2026-07-31 11:55:08  WARM  price_quote=0.891s  scheme=Amazon
+2026-07-31 11:55:11  WARM  price_quote=0.525s  scheme=Amazon
+2026-07-31 11:55:12  WARM  price_quote=0.519s  scheme=Amazon
+2026-08-06 10:56:39  COLD  price_quote=14.561s  scheme=Fictitious Test All
+2026-08-12 09:48:39  COLD  price_quote=2.590s  scheme=Fictitious Test All
+2026-08-12 09:48:44  WARM  price_quote=1.876s  scheme=Fictitious Test All
+2026-08-12 10:00:25  COLD  price_quote=1.967s  scheme=Fictitious Test All
+2026-08-12 10:00:31  WARM  price_quote=1.893s  scheme=Fictitious Test All
+2026-08-12 10:05:52  COLD  price_quote=2.694s  scheme=Fictitious Test All
+2026-08-12 10:05:56  WARM  price_quote=1.814s  scheme=Fictitious Test All
+2026-08-12 10:06:04  WARM  price_quote=1.821s  scheme=Fictitious Test All
+2026-08-12 10:06:47  WARM  price_quote=1.865s  scheme=Fictitious Test All
+2026-08-12 10:21:51  WARM  price_quote=1.867s  scheme=Fictitious Test All
+2026-08-12 10:31:21  WARM  price_quote=1.886s  scheme=Fictitious Test All
+2026-08-12 10:38:17  WARM  price_quote=1.846s  scheme=Fictitious Test All
+2026-08-12 10:52:04  WARM  price_quote=1.998s  scheme=Fictitious Test All
+2026-08-12 10:52:32  WARM  price_quote=2.269s  scheme=Fictitious Test All
+2026-08-12 10:53:31  COLD  price_quote=3.400s  scheme=Fictitious Test All
+2026-08-12 10:53:36  WARM  price_quote=2.223s  scheme=Fictitious Test All
+2026-08-12 10:54:25  WARM  price_quote=2.196s  scheme=Fictitious Test All
+2026-08-12 10:55:15  WARM  price_quote=2.078s  scheme=Fictitious Test All
+2026-08-12 10:56:00  WARM  price_quote=2.007s  scheme=Fictitious Test All
+2026-08-12 10:58:38  WARM  price_quote=2.067s  scheme=Fictitious Test All
+2026-08-12 10:59:58  WARM  price_quote=2.036s  scheme=Fictitious Test All
+2026-08-12 11:00:20  WARM  price_quote=2.047s  scheme=Fictitious Test All
+2026-08-12 11:00:32  WARM  price_quote=2.091s  scheme=Fictitious Test All
+2026-08-12 11:01:34  WARM  price_quote=2.073s  scheme=Fictitious Test All
+2026-08-12 11:02:41  WARM  price_quote=2.006s  scheme=Fictitious Test All
+2026-08-12 11:04:16  WARM  price_quote=2.026s  scheme=Fictitious Test All
+2026-08-12 11:05:24  WARM  price_quote=2.030s  scheme=Fictitious Test All
+2026-08-12 11:06:14  WARM  price_quote=2.053s  scheme=Fictitious Test All
+2026-08-12 11:09:43  WARM  price_quote=2.041s  scheme=Fictitious Test All
+2026-08-12 18:02:31  COLD  price_quote=2.424s  scheme=Fictitious Test All
+2026-08-14 10:23:42  COLD  price_quote=81.394s  scheme=Fictitious Test All
+2026-08-14 10:23:53  WARM  price_quote=4.457s  scheme=Fictitious Test All
+2026-08-14 10:24:39  WARM  price_quote=24.926s  scheme=Fictitious Test All
+2026-08-14 10:24:50  WARM  price_quote=4.739s  scheme=Fictitious Test All
+2026-08-14 10:24:57  WARM  price_quote=4.066s  scheme=Fictitious Test All
+2026-08-14 10:25:05  WARM  price_quote=4.072s  scheme=Fictitious Test All
+2026-08-14 10:37:32  WARM  price_quote=4.446s  scheme=Fictitious Test All
+2026-08-14 10:40:36  WARM  price_quote=4.370s  scheme=Fictitious Test All
+2026-08-14 10:42:07  COLD  price_quote=4.991s  scheme=Fictitious Test All
+2026-08-14 10:42:17  WARM  price_quote=4.657s  scheme=Fictitious Test All
+2026-08-14 11:32:42  COLD  price_quote=6.129s  scheme=Fictitious Test All
+2026-08-14 11:32:56  WARM  price_quote=5.429s  scheme=Fictitious Test All
+2026-08-14 12:13:57  WARM  price_quote=5.998s  scheme=Fictitious Test All
+2026-08-17 15:03:27  COLD  price_quote=4.620s  scheme=Fictitious Test All
+2026-08-17 15:31:31  COLD  price_quote=4.324s  scheme=Fictitious Test All
+2026-08-17 15:40:56  COLD  price_quote=4.768s  scheme=Fictitious Test All
+2026-08-17 15:54:42  COLD  price_quote=2.547s  scheme=Fictitious Test All
+2026-08-17 15:54:48  WARM  price_quote=2.248s  scheme=Fictitious Test All
+2026-08-18 12:04:09  COLD  price_quote=3.255s  scheme=Fictitious Test All
+2026-08-19 12:54:46  COLD  price_quote=3.160s  scheme=Fictitious Test All
+2026-08-19 13:17:05  COLD  price_quote=3.572s  scheme=Fictitious Test All
+2026-08-19 13:26:13  COLD  price_quote=3.648s  scheme=Fictitious Test All
+2026-08-19 13:53:00  WARM  price_quote=2.937s  scheme=Fictitious Test All
+2026-08-19 14:25:33  COLD  price_quote=7.283s  scheme=Fictitious Test All
+2026-08-19 15:16:02  COLD  price_quote=6.438s  scheme=Fictitious Test All
+2026-08-19 15:35:59  COLD  price_quote=6.243s  scheme=Fictitious Test All
+2026-08-19 16:24:18  COLD  price_quote=3.939s  scheme=Fictitious Test All
+2026-08-19 16:48:37  COLD  price_quote=3.195s  scheme=Fictitious Test All
+2026-08-19 16:56:25  COLD  price_quote=3.299s  scheme=Fictitious Test All
+2026-08-20 09:39:18  COLD  price_quote=2.688s  scheme=Fictitious Test All
+2026-08-20 09:51:58  COLD  price_quote=3.738s  scheme=De Beers Group Services (Pty) Ltd
+2026-08-20 10:13:28  COLD  price_quote=2.449s  scheme=Fictitious Test All
+2026-08-20 10:30:02  COLD  price_quote=3.276s  scheme=Fictitious Test All
+2026-08-20 10:41:52  COLD  price_quote=10.358s  scheme=De Beers Group Services (Pty) Ltd
+2026-08-20 10:42:28  WARM  price_quote=2.911s  scheme=Fictitious Test All
+2026-08-20 10:55:47  WARM  price_quote=4.258s  scheme=Fictitious Test All
+2026-08-20 11:12:22  COLD  price_quote=23.206s  scheme=Fictitious Test All
+2026-08-20 11:18:59  WARM  price_quote=3.484s  scheme=Fictitious Test All
+2026-08-20 11:44:00  COLD  price_quote=2.628s  scheme=Fictitious Test All
+2026-08-20 14:45:19  COLD  price_quote=4.483s  scheme=Fictitious Test All
+2026-08-20 14:57:22  COLD  price_quote=2.664s  scheme=Fictitious Test All
+2026-08-21 09:13:12  COLD  price_quote=2.246s  scheme=Fictitious Test All
+2026-08-21 09:27:28  WARM  price_quote=2.339s  scheme=Fictitious Test All
+2026-08-21 10:03:47  WARM  price_quote=2.459s  scheme=Fictitious Test All
+2026-08-21 10:07:21  COLD  price_quote=2.601s  scheme=Fictitious Test All
+2026-08-21 10:07:57  WARM  price_quote=2.742s  scheme=Fictitious Test All
+2026-08-21 10:13:39  WARM  price_quote=3.023s  scheme=Fictitious Test All
+2026-08-21 10:20:39  COLD  price_quote=2.739s  scheme=Fictitious Test All
+2026-08-21 10:20:45  WARM  price_quote=2.707s  scheme=Fictitious Test All
+2026-08-21 10:27:32  COLD  price_quote=2.658s  scheme=Fictitious Test All
+2026-08-21 10:27:37  WARM  price_quote=2.690s  scheme=Fictitious Test All
+2026-08-21 10:52:02  COLD  price_quote=0.630s  scheme=Coricraft
+2026-08-21 10:52:11  WARM  price_quote=0.509s  scheme=Coricraft
+2026-08-21 10:59:39  COLD  price_quote=0.488s  scheme=Jordon Farm
+2026-08-21 11:04:19  WARM  price_quote=2.912s  scheme=Fictitious Test All
+2026-08-21 11:08:12  WARM  price_quote=0.447s  scheme=Transnet Ltd
+2026-08-21 11:17:05  COLD  price_quote=2.207s  scheme=Fictitious Test All
+2026-08-21 11:19:07  WARM  price_quote=0.491s  scheme=Mumbo FS LSDB, FS CI, FC with Parents
+2026-08-21 11:26:30  WARM  price_quote=0.439s  scheme=Transnet Ltd
+2026-08-21 11:30:37  WARM  price_quote=2.580s  scheme=Fictitious Test All
+2026-08-21 11:46:43  COLD  price_quote=0.299s  scheme=Transnet Ltd
+2026-08-21 11:53:42  WARM  price_quote=2.843s  scheme=Fictitious Test All
+2026-08-21 12:01:12  WARM  price_quote=0.288s  scheme=Transnet Ltd
+2026-08-21 12:03:57  COLD  price_quote=0.583s  scheme=Coricraft
+2026-08-21 12:04:59  WARM  price_quote=0.297s  scheme=Transnet Ltd
+2026-08-21 14:14:21  COLD  price_quote=2.359s  scheme=Fictitious Test All
+2026-08-21 14:14:26  WARM  price_quote=2.068s  scheme=Fictitious Test All
+2026-08-21 14:19:16  WARM  price_quote=0.126s  scheme=Hulamin
+2026-08-21 14:19:24  WARM  price_quote=0.072s  scheme=African Group Lubricants
+2026-08-21 14:55:01  COLD  price_quote=0.476s  scheme=Jordon Farm
+2026-08-21 14:55:04  WARM  price_quote=0.419s  scheme=Jordon Farm
+2026-08-21 15:01:54  WARM  price_quote=3.006s  scheme=Fictitious Test All
+2026-08-21 15:09:47  WARM  price_quote=2.413s  scheme=Fictitious Test All
+2026-08-21 15:24:49  WARM  price_quote=2.271s  scheme=Fictitious Test All
+2026-08-21 15:27:08  COLD  price_quote=2.153s  scheme=Fictitious Test All
+2026-08-21 15:32:54  COLD  price_quote=3.363s  scheme=Fictitious Test All
+2026-08-21 15:38:53  COLD  price_quote=2.705s  scheme=Fictitious Test All
+2026-08-21 15:43:50  COLD  price_quote=2.070s  scheme=Fictitious Test All
+2026-08-21 15:49:11  COLD  price_quote=2.718s  scheme=Fictitious Test All
+2026-08-21 15:52:28  WARM  price_quote=2.703s  scheme=Fictitious Test All
+2026-08-21 15:59:32  COLD  price_quote=2.129s  scheme=Fictitious Test All
+2026-08-21 15:59:47  WARM  price_quote=2.351s  scheme=Fictitious Test All
+2026-08-24 09:18:35  COLD  price_quote=4.087s  scheme=Fictitious Test All
+2026-08-24 09:51:30  COLD  price_quote=5.822s  scheme=Fictitious Test All
+2026-08-24 13:46:51  COLD  price_quote=3.781s  scheme=Fictitious Test All
+2026-08-24 13:54:55  COLD  price_quote=3.808s  scheme=Fictitious Test All
+2026-08-24 13:55:17  WARM  price_quote=2.632s  scheme=Fictitious Test All
+2026-08-24 13:55:49  WARM  price_quote=2.804s  scheme=Fictitious Test All
+2026-08-24 17:38:32  COLD  price_quote=3.867s  scheme=Fictitious Test All
+2026-08-25 11:10:12  COLD  price_quote=6.408s  scheme=Fictitious Test All
+2026-08-25 11:55:01  COLD  price_quote=1.367s  scheme=SACCAWU
+2026-08-25 12:01:39  WARM  price_quote=0.801s  scheme=Amazon
+2026-08-25 12:47:19  COLD  price_quote=2.903s  scheme=Fictitious Test All
+2026-08-25 12:49:55  COLD  price_quote=2.582s  scheme=Fictitious Test All
+2026-08-25 13:12:35  COLD  price_quote=2.859s  scheme=Fictitious Test All
+2026-08-25 13:13:02  WARM  price_quote=2.553s  scheme=Fictitious Test All
+2026-08-25 13:17:04  COLD  price_quote=2.845s  scheme=Fictitious Test All
+2026-08-25 13:43:25  COLD  price_quote=2.834s  scheme=Fictitious Test All
+2026-08-25 14:38:52  COLD  price_quote=3.054s  scheme=Fictitious Test All
+2026-08-25 14:40:35  COLD  price_quote=5.771s  scheme=Fictitious Test All
+2026-08-25 16:42:48  COLD  price_quote=3.033s  scheme=Fictitious Test All
+2026-08-25 16:48:35  COLD  price_quote=3.109s  scheme=Fictitious Test All
+2026-08-25 17:03:52  COLD  price_quote=2.939s  scheme=Fictitious Test All
+2026-08-25 17:12:53  COLD  price_quote=3.027s  scheme=Fictitious Test All
+2026-08-25 17:14:45  COLD  price_quote=2.889s  scheme=Fictitious Test All
+2026-08-25 17:21:40  COLD  price_quote=2.985s  scheme=Fictitious Test All
+2026-08-25 17:26:55  COLD  price_quote=3.281s  scheme=Fictitious Test All
+2026-08-25 17:34:30  COLD  price_quote=3.194s  scheme=Fictitious Test All
+2026-08-25 17:38:36  COLD  price_quote=3.442s  scheme=Fictitious Test All
+2026-08-25 17:57:26  COLD  price_quote=3.090s  scheme=Fictitious Test All
+2026-08-26 10:15:39  COLD  price_quote=1.845s  scheme=Amazon
+2026-08-26 10:19:25  COLD  price_quote=2.407s  scheme=Fictitious Test All
+2026-08-26 14:45:15  COLD  price_quote=3.148s  scheme=Fictitious Test All
+2026-08-27 12:18:05  COLD  price_quote=2.480s  scheme=Fictitious Test All
+2026-08-27 12:18:45  WARM  price_quote=0.635s  scheme=Amazon
+2026-08-27 12:19:16  WARM  price_quote=2.316s  scheme=Amazon
+2026-08-27 12:19:33  WARM  price_quote=4.838s  scheme=Fictitious Test All
+2026-08-27 12:24:28  COLD  price_quote=2.480s  scheme=SACCAWU
+2026-08-27 12:24:44  WARM  price_quote=2.352s  scheme=Amazon
+2026-08-27 12:40:55  COLD  price_quote=3.723s  scheme=Amazon
+2026-08-27 12:59:55  WARM  price_quote=3.263s  scheme=Fictitious Test All
+2026-08-27 13:00:19  WARM  price_quote=0.693s  scheme=Coricraft
+2026-08-27 13:01:07  WARM  price_quote=0.198s  scheme=Hulamin
+2026-08-28 11:47:00  COLD  price_quote=0.607s  scheme=De Beers Group Services (Pty) Ltd
+2026-08-28 11:58:01  COLD  price_quote=2.855s  scheme=Fictitious Test All
+2026-08-28 11:58:36  WARM  price_quote=2.505s  scheme=Fictitious Test All
+2026-08-28 11:58:39  COLD  price_quote=27.498s  scheme=Merry Pack
+2026-08-28 12:11:21  COLD  price_quote=2.910s  scheme=Fictitious Test All
+2026-08-28 12:14:14  COLD  price_quote=18.463s  scheme=Fictitious Test All
+2026-08-28 12:14:52  WARM  price_quote=2.713s  scheme=Fictitious Test All
+2026-08-28 13:45:50  COLD  price_quote=3.098s  scheme=Fictitious Test All
+2026-08-28 13:48:59  COLD  price_quote=8.159s  scheme=Fictitious Test All
+2026-08-28 14:20:38  WARM  price_quote=8.609s  scheme=Fictitious Test All
+2026-08-31 09:39:17  COLD  price_quote=4.317s  scheme=Fictitious Test All
+2026-08-31 09:41:10  WARM  price_quote=2.743s  scheme=Amazon
+2026-09-02 10:45:57  COLD  price_quote=3.575s  scheme=Fictitious Test All
+2026-09-02 10:49:43  COLD  price_quote=7.057s  scheme=Fictitious Test All
+2026-09-02 10:51:35  COLD  price_quote=3.013s  scheme=Fictitious Test All
+2026-09-02 10:52:46  WARM  price_quote=0.496s  scheme=Mumbo Accel LSDB, Accel CI, Ext FC
+2026-09-02 10:53:46  WARM  price_quote=2.135s  scheme=Fictitious Test All
+2026-09-02 11:09:06  COLD  price_quote=2.364s  scheme=Fictitious Test All
+2026-09-02 11:24:03  COLD  price_quote=2.754s  scheme=Fictitious Test All
+2026-09-02 11:32:26  COLD  price_quote=0.426s  scheme=Jordon Farm
+2026-09-02 11:58:24  COLD  price_quote=0.266s  scheme=Transnet Ltd
+2026-09-04 16:18:29  COLD  price_quote=1.196s  scheme=Fictitious Test All
+2026-09-07 10:16:44  COLD  price_quote=2.974s  scheme=Fictitious Test All
+2026-09-10 16:55:34  COLD  price_quote=1.324s  scheme=Fictitious Test All
+2026-09-17 11:30:39  COLD  price_quote=4.097s  scheme=Fictitious Test All
+2026-09-17 11:40:46  WARM  price_quote=3.684s  scheme=Fictitious Test All
+2026-09-23 22:15:06  COLD  price_quote=4.917s  scheme=Fictitious Test All
+2026-09-25 09:16:49  COLD  price_quote=48.797s  scheme=Amazon

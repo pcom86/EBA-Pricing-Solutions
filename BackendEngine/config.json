@@ -1,0 +1,24 @@
+{
+  "paths": {
+    "input": "Test/Batch run",
+    "output": "pricing_output",
+    "cache": null,
+    "staging": null,
+    "artifacts": "local_s3_bucket",
+    "basis": "basis_snapshots",
+    "assumptions": "assumption_snapshots"
+  },
+  "snapshots": {
+    "basis": "basis_v2026_08",
+    "assumptions": "assumption_A2026_08"
+  },
+  "database": {
+    "enabled": false
+  },
+  "workers": {
+    "pricing": 6,
+    "reports": 3,
+    "database": 1
+  },
+  "service_urls": {}
+}
