@@ -12,6 +12,34 @@ Run from the repository root copied into the image (for example, `/app`). Use an
 
 This document describes the application runtime contract. It does not provision an ECS cluster, task definition, container image, network, IAM policy, or database. The image and live AWS integration must be validated separately.
 
+## Build and check the headless image
+
+The Dockerfile and `.dockerignore` are in `BackendEngine`. From the solution root,
+build the headless image with the `BackendEngine` directory as its context:
+
+```sh
+docker build -f BackendEngine/Dockerfile --target headless -t gap-pricing:local BackendEngine
+```
+
+For workloads using S3, select the optional target, which installs the existing
+`requirements-s3.txt` manifest:
+
+```sh
+docker build -f BackendEngine/Dockerfile --target headless-s3 -t gap-pricing:s3 BackendEngine
+```
+
+The image entrypoint is `python -B -m pricing_engine`. A non-root, read-only
+runtime configuration check can be run without pricing fixtures:
+
+```sh
+docker run --rm --init --read-only --cap-drop ALL --security-opt no-new-privileges \
+  --tmpfs /tmp:rw,nosuid,nodev,size=64m,mode=1777 \
+  gap-pricing:local --check-config
+```
+
+This verifies configuration and writable cache/staging paths only; it is not a
+representative pricing job or proof of Fargate readiness.
+
 ## Dependencies
 
 Use an approved existing Python environment or build these declared dependency sets into the image:

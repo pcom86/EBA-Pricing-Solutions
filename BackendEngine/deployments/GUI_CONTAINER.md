@@ -15,27 +15,48 @@ existing S3 adapter is unchanged.
 
 ## Build
 
-From the repository root, using a Linux Docker engine:
+The Dockerfile and `.dockerignore` live in `BackendEngine`. From the solution root, using a Linux Docker engine, set the build context to `BackendEngine`:
 
 ```sh
-docker build --target runtime -t gap-gui:local .
-docker build --target test -t gap-gui:test .
+docker build -f BackendEngine/Dockerfile --target runtime -t gap-gui:local BackendEngine
+docker build -f BackendEngine/Dockerfile --target test -t gap-gui:test BackendEngine
+docker build -f BackendEngine/Dockerfile --target headless -t gap-pricing:local BackendEngine
+docker build -f BackendEngine/Dockerfile --target headless-s3 -t gap-pricing:s3 BackendEngine
 ```
 
-The image uses Python 3.12 on Debian Bookworm, the existing pinned GUI Python
-requirements, and native Qt/X11 libraries. It does not install the project as a
-package or modify `sys.path`. The build checks real Qt offscreen initialization.
-No packages need to be installed on the host.
+The `runtime` and `test` targets use Python 3.12 on Debian Bookworm, the existing
+pinned GUI requirements, and native Qt/X11 libraries. The build checks real Qt
+offscreen initialization. The `headless` target runs `python -B -m pricing_engine`
+using `requirements-engine.txt`; `headless-s3` adds the existing optional S3
+dependencies. The headless targets do not install GUI or Qt dependencies. All
+targets use the source tree directly and do not modify `sys.path`.
 
 The build-context allowlist excludes CTRs, snapshots, generated reports, Git
-history, notebooks, credentials, and bytecode. Only Python source, the existing
-GUI dependency manifest, and `config.json` are copied. Runtime excludes tests.
+history, notebooks, credentials, and bytecode. It includes the source packages,
+the dependency manifests required by each target, and `config.json`. Runtime
+images exclude tests.
 Review `config.json` before building: it must never contain secrets.
 
 For release builds, record the built image digest and vulnerability scan results.
 The base tag and OS package repository are not immutable; the target makes test
 execution repeatable, not image builds byte-for-byte reproducible. Pin an approved
 base-image digest in your release pipeline when available.
+
+## Docker contract and runtime tests
+
+From `BackendEngine`, run the fast Dockerfile contract tests with:
+
+```sh
+python -B -m unittest tests.test_docker_contract -v
+```
+
+The actual image build and read-only, non-root `--check-config` runtime test is
+opt-in and requires Docker. In PowerShell, from `BackendEngine`, run:
+
+```powershell
+$env:GAP_RUN_DOCKER_TESTS = "1"
+python -B -m unittest tests.test_docker_runtime -v
+```
 
 ## Configuration and mounts
 

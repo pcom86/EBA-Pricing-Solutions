@@ -10,13 +10,13 @@ The repository contains five cooperating Python packages: `gap_config`, `ctr_loa
 
 ## Current state, verified by source inspection
 
-- Root `Dockerfile` defines a combined PySide6 GUI runtime and an offscreen test target. Its runtime entry point is `python -B -m gap_pricing_gui.launch_gap_gui`; it is not a headless pricing image.
+- `BackendEngine/Dockerfile` defines separate `headless` and optional `headless-s3` pricing targets, plus the existing PySide6 GUI `runtime` and offscreen `test` targets. The headless entrypoint is `python -B -m pricing_engine`; the GUI runtime entrypoint remains `python -B -m gap_pricing_gui.launch_gap_gui`.
 - `pricing_engine/__main__.py` and `pricing_engine/cli.py` provide a separate headless command, `python -B -m pricing_engine`. The CLI loads snapshots and CTR inputs, runs pricing, waits for reports, and returns a nonzero exit code for failures. `--check-config` checks configuration and writable working directories, not full pricing readiness.
 - `gap_config/settings.py` already provides validated settings, environment overrides, local cache/staging paths, snapshot selection, optional database settings, and configurable workers. Reuse it rather than introducing a competing configuration system.
 - `gap_config/storage.py` supports filesystem and S3 storage; S3 requires the separately declared `requirements-s3.txt` and AWS credentials from the SDK credential chain. The current GUI path validation is mounted-filesystem-only.
-- `requirements-engine.txt` declares headless dependencies; `requirements-s3.txt` and `requirements-db.txt` are optional sets. The GUI image installs `gap_pricing_gui/requirements.txt`, not the S3 set. Database integration is disabled by default and requires an appropriate SQL Server ODBC driver and an existing database/schema if enabled.
+- `requirements-engine.txt` declares headless dependencies and is installed by the `headless` target; `headless-s3` additionally installs `requirements-s3.txt`. GUI targets use `gap_pricing_gui/requirements.txt`. Database integration is disabled by default and requires an appropriate SQL Server ODBC driver and an existing database/schema if enabled.
 - `deployments/ECS_LINUX.md` describes a headless ECS-on-EC2 runtime contract, not provisioned Fargate resources. `deployments/GUI_CONTAINER.md` documents the separate GUI image and supplied-display requirement. `pricing_engine/FASTAPI_API_PLAN.md` is a future API plan and contains some stale storage/database statements.
-- Unit tests and an opt-in real pricing smoke test exist. `tests/run_container_tests.py` explicitly runs the GUI integration target using mounted fixtures. These tests are useful but do not by themselves prove the headless image or a live Fargate task works.
+- Unit tests, Dockerfile contract tests, an opt-in headless Docker build/runtime check, and an opt-in real pricing smoke test exist. `tests/run_container_tests.py` explicitly runs the GUI integration target using mounted fixtures. These tests do not by themselves prove a representative headless pricing job or a live Fargate task works.
 - No Fargate task definition or infrastructure-as-code deployment was identified in the inspected workspace. Docker image builds, real GUI/pricing workloads and live AWS integration must be verified in the target environment; do not treat static inspection or mocked tests as proof.
 
 ## Decisions and prerequisites
@@ -54,12 +54,12 @@ Priority is: (1) confirm backend/client contract and data choices, (2) build and
 
 ### 2. Build the production container
 
-- For the selected headless pricing workload, add a dedicated runtime target or Dockerfile that runs `python -B -m pricing_engine` using an exec-form entrypoint. Do not make a GUI display or PySide6 a prerequisite for batch processing. Preserve the existing GUI/test targets.
+- The `headless` target in `BackendEngine/Dockerfile` runs `python -B -m pricing_engine` using an exec-form entrypoint and `requirements-engine.txt`; `headless-s3` adds the optional S3 dependency set. Do not make a GUI display or PySide6 a prerequisite for batch processing. Preserve the existing GUI/test targets.
 - Include the required source packages, root configuration, and `requirements-engine.txt`; include `requirements-s3.txt` only when S3 is selected and DB dependencies/native driver only when DB is in scope. Ensure `.dockerignore` allows every manifest and source file actually needed while excluding CTRs, snapshots, credentials, generated reports, and unnecessary files.
 - Run as a non-root user. Support a read-only root filesystem with explicitly writable task-local cache/staging or chosen volumes. Never write secrets into the image; use a trusted base image and pinned or controlled dependency sources.
 - Select and validate a Fargate-supported OS/CPU architecture and compatible native wheels/libraries. Pin the approved base-image digest for releases; publish immutable image digests to ECR. Document a repeatable build and run command.
 
-**Done when:** the selected production image builds on the target architecture, runs `--check-config` as non-root with the intended filesystem layout, and retains the existing GUI image behavior.
+**Done when:** the selected production image builds on the target architecture, passes the non-root/read-only `--check-config` check and a representative headless pricing job, and retains the existing GUI image behavior. Actual Linux image and Fargate validation remain pending until run in the target environment.
 
 ### 3. Make execution and shutdown Fargate-safe
 

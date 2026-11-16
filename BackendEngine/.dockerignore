@@ -3,6 +3,8 @@
 !Dockerfile
 !.dockerignore
 !config.json
+!requirements-engine.txt
+!requirements-s3.txt
 !gap_config/
 !gap_config/**/*.py
 !gap_pricing_gui/
