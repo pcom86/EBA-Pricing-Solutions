@@ -42,6 +42,12 @@ class ReportTests(unittest.TestCase):
 		self.addCleanup(modules.stop)
 		self.runner = importlib.import_module("pricing_engine.concurrent_runner")
 		self.state = importlib.import_module("pricing_engine.async_state")
+		# concurrent_runner binds `import polars as pl` at module top; if it was
+		# already imported before the sys.modules patch above, its `pl` points at
+		# the real polars — patch the module attribute so the fake is used either way.
+		runner_polars = patch.object(self.runner, "pl", polars)
+		runner_polars.start()
+		self.addCleanup(runner_polars.stop)
 		for target, value in (("get_settings", self.settings),):
 			setting_patch = patch.object(self.runner, target, return_value=value)
 			setting_patch.start()
