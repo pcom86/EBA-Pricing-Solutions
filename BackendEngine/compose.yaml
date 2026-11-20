@@ -1,0 +1,40 @@
+services:
+  pricing:
+    build:
+      context: .
+      target: headless
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,mode=1777
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    network_mode: none
+    environment:
+      - GAP_BASIS_SNAPSHOT
+      - GAP_ASSUMPTION_SNAPSHOT
+    volumes:
+      - type: bind
+        source: ${GAP_HOST_INPUT:-./Test/Batch run}
+        target: /data/input
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${GAP_HOST_BASIS:-./basis_snapshots}
+        target: /data/basis
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${GAP_HOST_ASSUMPTIONS:-./assumption_snapshots}
+        target: /data/assumptions
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${GAP_HOST_OUTPUT:-./pricing_output}
+        target: /data/output
+        bind:
+          create_host_path: false
