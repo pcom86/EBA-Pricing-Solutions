@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from datetime import date
 
 import polars as pl
-
 from pricing_engine.engine import PricingContext, build_context
 
 

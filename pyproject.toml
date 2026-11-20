@@ -1,0 +1,7 @@
+[tool.ruff]
+target-version = "py312"
+extend-exclude = ["*.ipynb"]
+
+[tool.ruff.lint]
+# Several modules re-export or import names for side effects; auto-removing them breaks the app.
+unfixable = ["F401"]

@@ -1,12 +1,18 @@
 from __future__ import annotations
+
+import logging
+
 import polars as pl
 
 from .constants import (
-    CB_PRODUCTS, PO_PRODUCTS, PO_TECH_ADDONS,
-    N_CATEGORIES, DEFAULT_COMMISSION_PCT, DEFAULT_VAT_PCT,
+    CB_PRODUCTS,
+    DEFAULT_COMMISSION_PCT,
+    DEFAULT_VAT_PCT,
+    N_CATEGORIES,
+    PO_PRODUCTS,
+    PO_TECH_ADDONS,
 )
-from .demographics import compute_eoh_for_scheme, _tt_active
-import logging
+from .demographics import _tt_active, compute_eoh_for_scheme
 
 logger = logging.getLogger(__name__)
 
@@ -2263,7 +2269,7 @@ def _cb_ext_fc(all_results, scheme, assump, ctr=None):
             "extended_family_standard": _ext_fc_rate_rows(ext_fc_df, cat, "extended_family", profit_std, admin_std, comm_std, vat_pct),
         }
         def _priced_rows(relative_type):
-            base_rows = _ext_fc_rate_rows(ext_fc_df, cat, relative_type, 1.0, 0.0, 0.0, 0.0)
+            base_rows = _ext_fc_rate_rows(ext_fc_df, cat, relative_type, 1.0, 0.0, 0.0, 0.0)  # noqa: B023 - called in this iteration
             out_rows = []
             for br in base_rows:
                 e_priced = br["risk_premium"] * rate_basis_priced

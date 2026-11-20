@@ -4,7 +4,6 @@ from types import SimpleNamespace
 
 import polars as pl
 import pytest
-
 from pricing_engine.helpers_common import (
     apply_ctr_max_cover,
     apply_income_taper,

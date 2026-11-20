@@ -4,8 +4,7 @@ from datetime import date
 
 import polars as pl
 import pytest
-
-from pricing_engine.engine import PricingContext, build_context
+from pricing_engine.engine import build_context
 from pricing_engine.helpers_common import (
     apply_factor,
     compute_ceasing_age,

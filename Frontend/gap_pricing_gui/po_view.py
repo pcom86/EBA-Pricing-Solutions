@@ -29,8 +29,7 @@ def _last_content_col(rows: list) -> int:
     for row in rows:
         for i in range(len(row) - 1, -1, -1):
             if row[i].display.strip():
-                if i > max_idx:
-                    max_idx = i
+                max_idx = max(max_idx, i)
                 break
     return max_idx
 
@@ -105,7 +104,7 @@ def compute_visible_products(po_products: list, active_products) -> list:
     return [p for p in po_products if _is_product_active(p, active_set)]
 
 
-def find_express_row(table) -> "int | None":
+def find_express_row(table) -> int | None:
     for r in range(table.rowCount()):
         item = table.item(r, 0)
         if item and item.text().strip() == "Express over GLA Salary":
@@ -158,7 +157,7 @@ def is_priced_margin_editable(pkey: str, field_key: str) -> bool:
     return field_key in _PRICED_MARGIN_EDITABLE_FIELDS.get(pkey, frozenset())
 
 
-def find_priced_margins_rows(table) -> "dict[str, int] | None":
+def find_priced_margins_rows(table) -> dict[str, int] | None:
     title_row = None
     for r in range(table.rowCount()):
         item = table.item(r, 0)

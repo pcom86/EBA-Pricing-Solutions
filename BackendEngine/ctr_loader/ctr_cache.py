@@ -1,9 +1,17 @@
 from __future__ import annotations
-import shutil, threading, hashlib, os, re
+
+import hashlib
+import logging
+import os
+import re
+import shutil
+import threading
 from pathlib import Path
 
 from gap_config import get_settings
 from gap_config.storage import local_file
+
+logger = logging.getLogger(__name__)
 
 _locks_guard = threading.Lock()
 _locks: dict = {}
@@ -113,7 +121,7 @@ def prefetch_async(src, cache_dir=None, on_log=None) -> threading.Thread:
         try:
             local_ctr_path(src, cache_dir, on_log)
         except Exception:
-            pass
+            logger.warning("CTR prefetch failed for %s; it will be loaded on demand", src, exc_info=True)
     t = threading.Thread(target=_run, daemon=True, name="ctr_prefetch")
     t.start()
     return t

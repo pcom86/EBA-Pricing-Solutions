@@ -1,6 +1,6 @@
 from __future__ import annotations
-import polars as pl
 
+import polars as pl
 
 PRODUCT_DISPLAY_NAMES = {
     "gla":                 "Group Life Assurance",

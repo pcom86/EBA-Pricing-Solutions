@@ -4,7 +4,6 @@ from datetime import date
 
 import polars as pl
 import pytest
-
 from pricing_engine.helpers_common import (
     _apply_mortality,
     attach_category,

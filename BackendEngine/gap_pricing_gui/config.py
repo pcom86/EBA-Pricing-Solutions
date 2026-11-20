@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from functools import lru_cache
 
-from gap_config import get_settings
 from ctr_loader.engine_paths import snapshot_dir
+from gap_config import get_settings
 
 
 @lru_cache(maxsize=1)

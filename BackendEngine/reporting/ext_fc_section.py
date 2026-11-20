@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.styles.cell_style import StyleArray
 
 _SECTION_FONT      = Font(bold=True, size=12, color="FFFFFF")

@@ -3,8 +3,8 @@ from __future__ import annotations
 import polars as pl
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from .theme import OM, SUMMARY_TABLE_QSS
 from .models import FastModel
+from .theme import OM, SUMMARY_TABLE_QSS
 
 PRODUCT_NAMES = {
     "gla": "GLA",

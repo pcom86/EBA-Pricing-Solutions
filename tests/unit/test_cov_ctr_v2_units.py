@@ -11,7 +11,6 @@ from datetime import date
 
 import polars as pl
 import pytest
-
 from ctr_loader import ctr_loader_v2 as cl
 from ctr_loader.ctr_schemas import SchemeRecord
 from ctr_loader.products_registry import PRODUCT_REGISTRY

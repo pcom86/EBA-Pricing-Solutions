@@ -1,14 +1,26 @@
 from __future__ import annotations
-from dataclasses import dataclass, replace
-from pathlib import Path
-from functools import lru_cache
-from typing import Any
-from types import MappingProxyType
+
 import json
+import logging
+from dataclasses import dataclass, replace
+from functools import lru_cache
+from pathlib import Path
+from types import MappingProxyType
+from typing import Any
+
 import polars as pl
-from .products_registry import PRODUCT_REGISTRY
-from .snapshot_bundle_utils import BUNDLE_NAME, _bundle_is_fresh, _read_from_bundle, _read_threaded, rezip_snapshot
 from gap_config.storage import local_directory
+
+from .products_registry import PRODUCT_REGISTRY
+from .snapshot_bundle_utils import (
+    BUNDLE_NAME,
+    _bundle_is_fresh,
+    _read_from_bundle,
+    _read_threaded,
+    rezip_snapshot,
+)
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -87,7 +99,7 @@ def _read_meta(folder: Path) -> dict:
                 if k in last.columns and last[k][0] is not None:
                     meta[k] = str(last[k][0])
         except Exception:
-            pass
+            logger.warning("Could not read assumption build metadata from %s", log, exc_info=True)
     return meta
 
 

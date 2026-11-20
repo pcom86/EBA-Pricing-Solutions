@@ -20,7 +20,6 @@ from types import SimpleNamespace
 
 import polars as pl
 import pytest
-
 from ctr_loader.assumption_loader import get_assumptions
 from ctr_loader.basis_loader import get_basis
 from ctr_loader.ctr_loader_v2 import load_ctr

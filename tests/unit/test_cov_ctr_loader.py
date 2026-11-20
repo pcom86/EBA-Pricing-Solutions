@@ -11,16 +11,18 @@ from types import MappingProxyType, SimpleNamespace
 
 import polars as pl
 import pytest
-
-from gap_config import get_settings
-
-import ctr_loader.assumption_loader as assumption_loader
-import ctr_loader.basis_loader as basis_loader
-from ctr_loader import ctr_cache, ctr_coerce, engine_paths
+from ctr_loader import (
+    assumption_loader,
+    basis_loader,
+    ctr_cache,
+    ctr_coerce,
+    engine_paths,
+)
 from ctr_loader import products_registry as registry
 from ctr_loader import snapshot_bundle_utils as sbu
 from ctr_loader.assumption_loader import AssumptionsBundle
 from ctr_loader.basis_loader import BasisBundle
+from gap_config import get_settings
 
 pytestmark = pytest.mark.unit
 

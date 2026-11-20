@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 from PySide6 import QtCore, QtGui, QtWidgets
-
+from reporting.category_breakdown import CB_SECTION_TITLE
 from reporting.grid_extract import GridSheet
 from reporting.grid_sections import group_grid_by_sections
-from reporting.category_breakdown import CB_SECTION_TITLE
 
 from .theme import PILL_QSS
 
@@ -18,7 +17,7 @@ def _qcolor_from_hex(hex_str: str | None):
         return None
 
 
-def populate_table_from_grid(table: "QtWidgets.QTableWidget", grid: GridSheet) -> None:
+def populate_table_from_grid(table: QtWidgets.QTableWidget, grid: GridSheet) -> None:
     table.clear()
     table.setRowCount(grid.n_rows)
     table.setColumnCount(grid.n_cols)

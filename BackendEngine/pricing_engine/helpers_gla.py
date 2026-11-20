@@ -1,13 +1,15 @@
 from __future__ import annotations
+
+import calendar
+import math
+import re
 from datetime import date
 from typing import Any
-import math
-import polars as pl
-import calendar
-import re
-from . import helpers_common
-from .helpers_common import _co_rate, _co_eligibility_mask
 
+import polars as pl
+
+from . import helpers_common
+from .helpers_common import _co_eligibility_mask, _co_rate
 
 __all__ = [
     "_apply_ti_scales_gla",

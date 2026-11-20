@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import time
 import logging
 import threading
+import time
 import traceback
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 from concurrent.futures import ThreadPoolExecutor as _ThreadPoolExecutor
 
 import polars as pl
-
 from gap_config import get_settings
 from gap_config.storage import Storage, is_s3, join_location, local_file
 
@@ -63,8 +62,8 @@ def _get_report_executor() -> _ThreadPoolExecutor:
 
 def load_shared_snapshots(basis_folder: str | Path,
                           assump_folder: str | Path) -> tuple[Any, Any]:
-    from ctr_loader.basis_loader import get_basis
     from ctr_loader.assumption_loader import get_assumptions
+    from ctr_loader.basis_loader import get_basis
 
     basis  = get_basis(basis_folder)
     assump = get_assumptions(assump_folder)
@@ -113,8 +112,9 @@ def run_single_quote(ctr_path: str | Path,
                      basis_folder: str | None = None,
                      assump_folder: str | None = None) -> QuoteResult:
     from ctr_loader.ctr_loader_v2 import load_ctr
-    from .engine import price, build_context, price_all_products
     from reporting import write_pricing_report
+
+    from .engine import build_context, price, price_all_products
 
     output_root = str(out_dir)
     out_dir = Path(".") if is_s3(output_root) else Path(output_root)
@@ -262,8 +262,9 @@ def _write_report_worker(job: ReportWriteJob) -> None:
     case_id = job.case_id
     quote_seq = job.quote_seq
     store = Storage(job.output_root or out_path.parent)
-    from . import async_state
     from reporting import write_pricing_report
+
+    from . import async_state
 
     async_state.report_write_started()
     from datetime import datetime as _dt_marker2
@@ -339,9 +340,10 @@ def _write_report_worker(job: ReportWriteJob) -> None:
                 async_state.db_write_started()
                 try:
                     import pandas as pd
-                    from .db_loader import load_run_to_db
                     from ctr_loader.engine_paths import snapshot_dir
                     from gap_config.storage import Storage
+
+                    from .db_loader import load_run_to_db
 
                     df_result = pd.DataFrame(pl.read_parquet(parquet_path).to_dicts())
                     s3 = Storage(get_settings().artifact_root)
@@ -464,8 +466,9 @@ def run_quotes_concurrent(ctr_paths: list[str | Path],
         logger.info(f"  Success / Failed:       {n_ok} / {n_fail}")
         logger.info(f"{'-' * 68}")
 
-    from . import async_state
     from datetime import datetime as _dt_marker
+
+    from . import async_state
     _pending_reports = async_state.report_writes_pending()
     _pending_db = async_state.db_writes_pending()
     logger.info(f"[BATCH READY] {_dt_marker.now().strftime('%H:%M:%S.%f')[:-3]} "

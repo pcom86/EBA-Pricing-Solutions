@@ -1,7 +1,8 @@
 from __future__ import annotations
+
 import math
-from datetime import date
 from typing import Any
+
 import polars as pl
 
 
@@ -665,7 +666,7 @@ def build_normal_margins_block(all_results: dict[str, pl.DataFrame],
 
     co_pct = {}
     ctc_pct = {}
-    for pkey in PKEY_TO_PARAM.keys():
+    for pkey in PKEY_TO_PARAM:
         df = all_results.get(pkey)
         if df is None:
             co_pct[pkey] = 0.0

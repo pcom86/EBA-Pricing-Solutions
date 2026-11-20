@@ -1,9 +1,11 @@
 
 from __future__ import annotations
-from datetime import date, datetime
-import re
-import xlrd
+
 import logging
+import re
+from datetime import date, datetime
+
+import xlrd
 
 logger = logging.getLogger(__name__)
 

@@ -1,13 +1,25 @@
 from __future__ import annotations
-from dataclasses import dataclass, replace
-from pathlib import Path
-from functools import lru_cache
-from types import MappingProxyType
+
 import json
+import logging
+from dataclasses import dataclass, replace
+from functools import lru_cache
+from pathlib import Path
+from types import MappingProxyType
+
 import polars as pl
-from .products_registry import PRODUCT_REGISTRY
-from .snapshot_bundle_utils import BUNDLE_NAME, _bundle_is_fresh, _read_from_bundle, _read_threaded, rezip_snapshot
 from gap_config.storage import local_directory
+
+from .products_registry import PRODUCT_REGISTRY
+from .snapshot_bundle_utils import (
+    BUNDLE_NAME,
+    _bundle_is_fresh,
+    _read_from_bundle,
+    _read_threaded,
+    rezip_snapshot,
+)
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -105,7 +117,7 @@ def _read_meta(folder: Path) -> dict:
                     if val is not None:
                         meta[col_meta] = str(val)
         except Exception:
-            pass
+            logger.warning("Could not read basis build metadata from %s", log, exc_info=True)
     return meta
 
 

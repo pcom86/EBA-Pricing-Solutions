@@ -14,10 +14,8 @@ from pathlib import Path
 from types import MappingProxyType, SimpleNamespace
 
 import pytest
-
-from gap_config import ConfigurationError, get_settings, load_settings
+from gap_config import ConfigurationError, get_settings, load_settings, storage
 from gap_config.settings import resolve_location, validate_location
-from gap_config import storage
 from gap_config.storage import (
     Storage,
     is_s3,

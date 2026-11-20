@@ -7,7 +7,6 @@ from types import SimpleNamespace
 import openpyxl
 import polars as pl
 import pytest
-
 from reporting import inputs as inp
 from reporting.category_breakdown import write_category_breakdown
 from reporting.ext_fc_section import apply_ext_fc_column_widths, write_ext_fc_section
@@ -20,7 +19,6 @@ from reporting.html_adapter import (
 )
 from reporting.pricing_outputs import _get_product_display_name, write_pricing_outputs
 from reporting.writer import _reorder_sheets, write_pricing_report
-
 
 # --------------------------------------------------------------------------
 # shared fixtures (mirrors of the inputs tests)

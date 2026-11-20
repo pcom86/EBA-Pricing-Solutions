@@ -1,24 +1,42 @@
 from __future__ import annotations
+
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from datetime import date
-from typing import Any, Iterable
+from typing import Any
+
 import polars as pl
+from ctr_loader.products_registry import PRODUCT_REGISTRY
 
 from .helpers import (
-    compute_age, pivot_categories_wide, attach_category,
-    mark_product_active, resolve_nra, compute_ceasing_age,
-    apply_factor, compute_cover, apply_cover_caps, apply_income_taper,
+    apply_cover_caps,
     apply_ctr_max_cover,
-    tax_gross_up, finalise_cover,
-    co_premium_gla, co_premium_lsdb, co_premium_spouse, co_premium_ci, zero_addon,
-    apply_post_rate_adjust, compute_qx, apply_profit_margin,
-    apply_special_premium, attach_gla_cover_for_ti,
-    zero_if_status,
-    deactivate_when_status,
+    apply_factor,
+    apply_income_taper,
+    apply_post_rate_adjust,
     apply_prb_premium,
+    apply_profit_margin,
+    apply_special_premium,
+    attach_category,
+    attach_gla_cover_for_ti,
+    co_premium_ci,
+    co_premium_gla,
+    co_premium_lsdb,
+    co_premium_spouse,
+    compute_age,
+    compute_ceasing_age,
+    compute_cover,
+    compute_qx,
+    deactivate_when_status,
+    finalise_cover,
+    mark_product_active,
+    pivot_categories_wide,
+    resolve_nra,
+    tax_gross_up,
+    zero_addon,
+    zero_if_status,
 )
 from .recipes import RECIPES
-from ctr_loader.products_registry import PRODUCT_REGISTRY
 
 
 @dataclass
@@ -43,9 +61,7 @@ def apply_cease_override(df, product_key, ctx):
     if gla is None:
         return df
     eog = (getattr(ctx.scheme, "express_over_gla", {}) or {})
-    if product_key != "gla" and eog.get(product_key, False):
-        col = "ceasing_age"
-    elif product_key == "spouse_gla":
+    if product_key != "gla" and eog.get(product_key, False) or product_key == "spouse_gla":
         col = "ceasing_age"
     elif product_key == "spouse_lsdb":
         col = "nra_final"
@@ -326,6 +342,7 @@ def price(product_key: str, ctr, basis, assump, ctx: PricingContext) -> pl.DataF
 
 def price_all_products(ctr, basis, assump, ctx, *, on_product_priced=None) -> dict[str, pl.DataFrame]:
     import time as _time
+
     from .helpers import build_ext_fc_rate_card
     all_results: dict[str, pl.DataFrame] = {}
     for pkey in ctr.active_products:

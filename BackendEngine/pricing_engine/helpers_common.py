@@ -1,10 +1,9 @@
 from __future__ import annotations
-from datetime import date
-from typing import Any
-import math
-import polars as pl
-import calendar
+
 import re
+from datetime import date
+
+import polars as pl
 
 try:
     from ctr_loader.products_registry import resolve_ci_mortality_table
@@ -12,57 +11,57 @@ except ImportError:
     resolve_ci_mortality_table = None
 
 __all__ = [
-    "compute_age",
-    "pivot_categories_wide",
-    "attach_category",
-    "mark_product_active",
-    "resolve_nra",
-    "compute_ceasing_age",
-    "apply_factor",
-    "_apply_mortality",
+    "_apply_baseline_yr",
+    "_apply_ci_industry_loading",
     "_apply_ci_mortality_dynamic",
+    "_apply_ci_standalone_loading",
+    "_apply_industry",
+    "_apply_mortality",
     "_apply_mortality_gender_swap",
+    "_apply_product_type_adj",
     "_apply_salary_band",
     "_apply_salary_factor",
-    "_apply_industry",
-    "_apply_ci_standalone_loading",
-    "_apply_ci_industry_loading",
     "_apply_trend",
     "_apply_waiting_pd",
-    "_apply_baseline_yr",
-    "_apply_product_type_adj",
-    "compute_cover",
+    "_as_yes",
+    "_cap_by_assumption_limit",
+    "_cap_by_prior_cover",
     "_cap_category_max_cover",
     "_cap_category_max_cover_field",
-    "_cap_by_prior_cover",
     "_cap_spouse_cover_cap",
-    "_cap_by_assumption_limit",
-    "apply_ctr_max_cover",
-    "tax_gross_up",
-    "apply_income_taper",
-    "finalise_cover",
-    "zero_if_status",
-    "deactivate_when_status",
-    "_vec_wp_months",
-    "_vec_asof_cascade",
-    "_vec_asof_by_gender",
-    "_vec_yearfrac_30_360",
     "_co_eligibility_mask",
-    "co_premium_spouse",
-    "co_premium_ci",
     "_co_rate",
-    "zero_addon",
-    "_as_yes",
-    "_normalise_percent",
-    "_lookup_spouse_factor",
-    "compute_qx",
-    "apply_profit_margin",
-    "_lookup_margin",
-    "apply_prb_premium",
-    "_gipf",
-    "_gip_key_part",
     "_gip_asof",
+    "_gip_key_part",
     "_gip_wp_months",
+    "_gipf",
+    "_lookup_margin",
+    "_lookup_spouse_factor",
+    "_normalise_percent",
+    "_vec_asof_by_gender",
+    "_vec_asof_cascade",
+    "_vec_wp_months",
+    "_vec_yearfrac_30_360",
+    "apply_ctr_max_cover",
+    "apply_factor",
+    "apply_income_taper",
+    "apply_prb_premium",
+    "apply_profit_margin",
+    "attach_category",
+    "co_premium_ci",
+    "co_premium_spouse",
+    "compute_age",
+    "compute_ceasing_age",
+    "compute_cover",
+    "compute_qx",
+    "deactivate_when_status",
+    "finalise_cover",
+    "mark_product_active",
+    "pivot_categories_wide",
+    "resolve_nra",
+    "tax_gross_up",
+    "zero_addon",
+    "zero_if_status",
 ]
 
 
@@ -630,15 +629,7 @@ def compute_cover(df: pl.DataFrame, recipe: dict) -> pl.DataFrame:
               .otherwise(pl.col(cover_col))
               .alias("pre_tax_cover")
         )
-    elif rule == "fc_composite":
-        df = df.with_columns(pl.lit(0.0).alias("pre_tax_cover"))
-    elif rule == "gip_composite":
-        df = df.with_columns(pl.lit(0.0).alias("pre_tax_cover"))
-    elif rule == "tip_composite":
-        df = df.with_columns(pl.lit(0.0).alias("pre_tax_cover"))
-    elif rule == "education_guardian_composite":
-        df = df.with_columns(pl.lit(0.0).alias("pre_tax_cover"))
-    elif rule == "educate_a_child_composite":
+    elif rule == "fc_composite" or rule == "gip_composite" or rule == "tip_composite" or rule == "education_guardian_composite" or rule == "educate_a_child_composite":
         df = df.with_columns(pl.lit(0.0).alias("pre_tax_cover"))
     else:
         raise ValueError(f"Unknown cover_rule: {rule}")

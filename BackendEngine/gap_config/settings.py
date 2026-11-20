@@ -4,13 +4,12 @@ import json
 import os
 import re
 import tempfile
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path, PureWindowsPath
 from types import MappingProxyType
-from typing import Mapping
 from urllib.parse import urlsplit
-
 
 APPLICATION_ROOT = Path(__file__).resolve().parent.parent
 
@@ -158,7 +157,7 @@ def load_settings(config_file: str | Path | None = None,
 		try:
 			parts = urlsplit(value)
 			valid = parts.scheme in ("http", "https") and parts.hostname and not parts.username and not parts.password
-			parts.port
+			parts.port  # noqa: B018 - accessing .port raises ValueError for an invalid port
 		except ValueError:
 			valid = False
 		if not valid or parts.query or parts.fragment:

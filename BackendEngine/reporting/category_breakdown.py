@@ -1,15 +1,20 @@
 from __future__ import annotations
+
 from pathlib import Path
 
 import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.styles.cell_style import StyleArray
 
 from .constants import (
-    CB_PRODUCTS, CB_RENDER_ORDER, CB_SECTION_TITLE, CB_LABEL_SUFFIX,
-    CB_ADDONS, N_CATEGORIES,
+    CB_ADDONS,
+    CB_LABEL_SUFFIX,
+    CB_PRODUCTS,
+    CB_RENDER_ORDER,
+    CB_SECTION_TITLE,
+    N_CATEGORIES,
 )
-from .ext_fc_section import write_ext_fc_section, apply_ext_fc_column_widths
+from .ext_fc_section import apply_ext_fc_column_widths, write_ext_fc_section
 
 _SECTION_FONT      = Font(bold=True, size=12, color="FFFFFF")
 _SECTION_FILL      = PatternFill("solid", fgColor="A6A6A6")
@@ -378,7 +383,6 @@ def _apply_column_widths(ws, min_width: float = 10.0, max_width: float = 40.0) -
             if cell.value is None:
                 continue
             length = len(str(cell.value))
-            if length > longest:
-                longest = length
+            longest = max(longest, length)
         width = max(min_width, min(longest + 2, max_width))
         ws.column_dimensions[col_letter].width = width

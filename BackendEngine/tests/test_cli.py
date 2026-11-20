@@ -11,6 +11,7 @@ from unittest.mock import Mock, patch
 
 from gap_config import get_settings
 from pricing_engine.cli import main
+
 from tests.fake_s3 import FakeS3
 
 

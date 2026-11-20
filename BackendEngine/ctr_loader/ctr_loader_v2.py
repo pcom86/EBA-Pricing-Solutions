@@ -1,28 +1,35 @@
 from __future__ import annotations
-from datetime import datetime, date
-from pathlib import Path
-from dataclasses import dataclass, replace
+
 import hashlib
 import logging
 import time
+from dataclasses import dataclass, replace
+from datetime import datetime
+from pathlib import Path
+
 import polars as pl
 
 logger = logging.getLogger(__name__)
 
 from python_calamine import CalamineWorkbook
 
-from .products_registry import PRODUCT_REGISTRY, IN_SCOPE_PRODUCTS, ProductSpec
-from .ctr_schemas import SchemeRecord, CTRBundle
 from .ctr_cache import local_ctr_path
 from .ctr_coerce import (
-    clean_text, to_float, to_int, to_pct,
-    excel_to_date, normalize_gender, snake_case,
+    clean_text,
+    excel_to_date,
+    normalize_gender,
+    snake_case,
+    to_float,
+    to_int,
+    to_pct,
 )
+from .ctr_schemas import CTRBundle, SchemeRecord
+from .products_registry import IN_SCOPE_PRODUCTS, PRODUCT_REGISTRY, ProductSpec
 
 
 class _CalamineSheet:
 
-    __slots__ = ("_rows", "nrows", "ncols")
+    __slots__ = ("_rows", "ncols", "nrows")
 
     def __init__(self, rows: list[list]):
         self._rows = rows
@@ -40,7 +47,7 @@ class _CalamineSheet:
 
 class _CalamineWorkbook:
 
-    __slots__ = ("_wb", "_names", "_cache", "datemode")
+    __slots__ = ("_cache", "_names", "_wb", "datemode")
 
     def __init__(self, path: Path):
         self._wb = CalamineWorkbook.from_path(str(path))
@@ -848,8 +855,10 @@ def _load_scheme_details_section(wb, available):
     t = time.perf_counter()
     ws = wb.sheet_by_name("Scheme Details - Save")
     scheme = _parse_scheme_details(ws, wb.datemode)
-    try: wb.unload_sheet("Scheme Details - Save")
-    except Exception: pass
+    try:
+        wb.unload_sheet("Scheme Details - Save")
+    except Exception:
+        logger.debug("Could not unload sheet %r", "Scheme Details - Save", exc_info=True)
     logger.info(f"  ✓ Scheme Details - Save parsed in {time.perf_counter()-t:.2f}s")
 
     if scheme.scheme_name is None and scheme.quote_number is None:
@@ -933,8 +942,10 @@ def _load_catinput_section(wb, available, scheme, active_products, warnings, ws)
             tip_fields = _read_tip_catinput_fields(ws, active_categories)
             scheme = replace(scheme, **tip_fields)
 
-        try: wb.unload_sheet("CatInput-Save")
-        except Exception: pass
+        try:
+            wb.unload_sheet("CatInput-Save")
+        except Exception:
+            logger.debug("Could not unload sheet %r", "CatInput-Save", exc_info=True)
         logger.info(f"  ✓ CatInput-Save parsed in {time.perf_counter()-t:.2f}s  "
               f"({categories_df.height} rows, BJ1 spouse_use_sp_sheet={spouse_use_sp_sheet})")
         logger.info(f"     express_over_gla = {express_over_gla}")
@@ -1036,8 +1047,10 @@ def _load_member_data_sections(wb, available, active_products, spouse_use_sp_she
         t = time.perf_counter()
         ws = wb.sheet_by_name(sheet_name)
         df = _parse_member_sheet(ws, wb.datemode)
-        try: wb.unload_sheet(sheet_name)
-        except Exception: pass
+        try:
+            wb.unload_sheet(sheet_name)
+        except Exception:
+            logger.debug("Could not unload sheet %r", sheet_name, exc_info=True)
         role = "gla_sheet" if sheet_name.endswith("- GLA") else \
                "sp_sheet" if sheet_name.endswith("- SP") else \
                "ext_fc_sheet" if sheet_name.endswith("- Ext FC") else \

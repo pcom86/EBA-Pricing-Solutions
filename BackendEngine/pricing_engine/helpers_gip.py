@@ -1,14 +1,24 @@
 from __future__ import annotations
+
+import calendar
+import math
+import re
 from datetime import date
 from typing import Any
-import math
-import polars as pl
-import calendar
-import re
-from . import helpers_common
-from .helpers_common import _gip_asof, _gip_key_part, _gip_wp_months, _gipf, \
-    _vec_asof_by_gender, _vec_asof_cascade, _vec_wp_months, _vec_yearfrac_30_360
 
+import polars as pl
+
+from . import helpers_common
+from .helpers_common import (
+    _gip_asof,
+    _gip_key_part,
+    _gip_wp_months,
+    _gipf,
+    _vec_asof_by_gender,
+    _vec_asof_cascade,
+    _vec_wp_months,
+    _vec_yearfrac_30_360,
+)
 
 __all__ = [
     "_apply_gip_composite",
@@ -715,13 +725,14 @@ def _gip_compute_member_rows(df, L, basis_tables):
         AV = _gipf(g.gip_hcc_escalation_pct.get(cat))
         AY = g.gip_include_conversion_option.get(cat, "No")
 
+        # Called only within this iteration, so loop variables are bound correctly.
         def _resolve(base):
-            if waiver_spec == "N/A":
+            if waiver_spec == "N/A":  # noqa: B023
                 return base
-            if waiver_spec == "As Per Data":
-                add = L_ if val3_2 == "No" else 0.0
-            elif waiver_spec == "Same For All":
-                add = emp_waiver if val3_2 == "No" else 0.0
+            if waiver_spec == "As Per Data":  # noqa: B023
+                add = L_ if val3_2 == "No" else 0.0  # noqa: B023
+            elif waiver_spec == "Same For All":  # noqa: B023
+                add = emp_waiver if val3_2 == "No" else 0.0  # noqa: B023
             else:
                 add = 0.0
             return base + add
@@ -853,7 +864,6 @@ def _gip_compute_member_rows(df, L, basis_tables):
 
 
 def _gip_eomonth(y, m):
-    import calendar
     return date(y, m, calendar.monthrange(y, m)[1])
 
 

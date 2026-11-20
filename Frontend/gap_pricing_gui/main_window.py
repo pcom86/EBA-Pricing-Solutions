@@ -1,19 +1,25 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
+from gap_config import ConfigurationError
 from PySide6 import QtCore, QtWidgets
 
-from gap_config import ConfigurationError
-from .file_access import batch_ctr_files, input_directory, input_file, output_directory, validate_gui_settings
-from .theme import NAV_QSS, EXPRESS_COMBO_QSS, MARGIN_EDIT_QSS
-from .models import FastModel
-from .workers import StartupThread, BatchThread, ViewPrewarmThread
-from .grid_view import ProductPillGridView, populate_table_from_grid
-from .category_split_bar import CategorySplitBar
-from .single_quote_view import SingleQuoteView
 from .batch_detail_dialog import BatchDetailDialog
-import logging
+from .category_split_bar import CategorySplitBar
+from .file_access import (
+    batch_ctr_files,
+    input_directory,
+    input_file,
+    output_directory,
+    validate_gui_settings,
+)
+from .grid_view import ProductPillGridView, populate_table_from_grid
+from .models import FastModel
+from .single_quote_view import SingleQuoteView
+from .theme import EXPRESS_COMBO_QSS, MARGIN_EDIT_QSS, NAV_QSS
+from .workers import BatchThread, StartupThread, ViewPrewarmThread
 
 logger = logging.getLogger(__name__)
 
@@ -278,9 +284,9 @@ class GapWindow(QtWidgets.QMainWindow):
         self.status.showMessage("building Category Breakdown view…")
         QtWidgets.QApplication.processEvents()
         import openpyxl
-        from reporting.inputs import gather_cb_data
         from reporting.category_breakdown import write_category_breakdown
         from reporting.grid_extract import sheet_to_grid
+        from reporting.inputs import gather_cb_data
 
         ctr = self.result.ctr_bundle
         assump = self.result.assump_bundle
@@ -304,10 +310,11 @@ class GapWindow(QtWidgets.QMainWindow):
         QtWidgets.QApplication.processEvents()
         try:
             import dataclasses
+
             import openpyxl
-            from reporting.inputs import gather_cb_data
             from reporting.category_breakdown import write_category_breakdown
             from reporting.grid_extract import sheet_to_grid
+            from reporting.inputs import gather_cb_data
 
             ctr = self.result.ctr_bundle
             assump = self.result.assump_bundle
@@ -345,9 +352,9 @@ class GapWindow(QtWidgets.QMainWindow):
         self.status.showMessage("building Pricing Outputs view…")
         QtWidgets.QApplication.processEvents()
         import openpyxl
+        from reporting.grid_extract import sheet_to_grid
         from reporting.inputs import gather_po_data
         from reporting.pricing_outputs import write_pricing_outputs
-        from reporting.grid_extract import sheet_to_grid
 
         ctr = self.result.ctr_bundle
         assump = self.result.assump_bundle
@@ -356,7 +363,7 @@ class GapWindow(QtWidgets.QMainWindow):
         wb.remove(wb.active)
         write_pricing_outputs(wb, po_data)
         grid = sheet_to_grid(wb["Pricing Outputs"], title="Pricing Outputs")
-        from .po_view import filter_po_grid_to_active, compute_visible_products
+        from .po_view import compute_visible_products, filter_po_grid_to_active
         grid = filter_po_grid_to_active(grid, po_data["products"], self.result.active_products)
         self._po_grid = grid
         self._po_products_visible = compute_visible_products(po_data["products"], self.result.active_products)
@@ -368,7 +375,7 @@ class GapWindow(QtWidgets.QMainWindow):
     def _install_express_combos(self) -> None:
         if not self.result or self._po_grid is None or not self._po_products_visible:
             return
-        from .po_view import find_express_row, _EXPRESS_ELIGIBLE_PKEYS
+        from .po_view import _EXPRESS_ELIGIBLE_PKEYS, find_express_row
         row = find_express_row(self.po_table)
         if row is None:
             return
@@ -414,12 +421,14 @@ class GapWindow(QtWidgets.QMainWindow):
         QtWidgets.QApplication.processEvents()
         try:
             import dataclasses
+
             import openpyxl
-            from reporting.inputs import gather_po_data, gather_cb_data
-            from reporting.pricing_outputs import write_pricing_outputs
             from reporting.category_breakdown import write_category_breakdown
             from reporting.grid_extract import sheet_to_grid
-            from .po_view import filter_po_grid_to_active, compute_visible_products
+            from reporting.inputs import gather_cb_data, gather_po_data
+            from reporting.pricing_outputs import write_pricing_outputs
+
+            from .po_view import compute_visible_products, filter_po_grid_to_active
 
             ctr = self.result.ctr_bundle
             assump = self.result.assump_bundle
@@ -539,11 +548,13 @@ class GapWindow(QtWidgets.QMainWindow):
         QtWidgets.QApplication.processEvents()
         try:
             import dataclasses
+
             import openpyxl
+            from reporting.grid_extract import sheet_to_grid
             from reporting.inputs import gather_po_data
             from reporting.pricing_outputs import write_pricing_outputs
-            from reporting.grid_extract import sheet_to_grid
-            from .po_view import filter_po_grid_to_active, compute_visible_products
+
+            from .po_view import compute_visible_products, filter_po_grid_to_active
 
             ctr = self.result.ctr_bundle
             assump = self.result.assump_bundle
@@ -604,12 +615,14 @@ class GapWindow(QtWidgets.QMainWindow):
         QtWidgets.QApplication.processEvents()
         try:
             import dataclasses
+
             import openpyxl
-            from reporting.inputs import gather_po_data, gather_cb_data
-            from reporting.pricing_outputs import write_pricing_outputs
             from reporting.category_breakdown import write_category_breakdown
             from reporting.grid_extract import sheet_to_grid
-            from .po_view import filter_po_grid_to_active, compute_visible_products
+            from reporting.inputs import gather_cb_data, gather_po_data
+            from reporting.pricing_outputs import write_pricing_outputs
+
+            from .po_view import compute_visible_products, filter_po_grid_to_active
 
             ctr = self.result.ctr_bundle
             assump = self.result.assump_bundle

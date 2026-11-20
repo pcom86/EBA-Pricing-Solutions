@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 import time
-from pathlib import Path
 
 import polars as pl
 from PySide6 import QtWidgets
 
-from .theme import OM, SUMMARY_TABLE_QSS
-from .single_quote_view import product_display_name, populate_summary_table
 from .grid_view import ProductPillGridView, populate_table_from_grid
+from .single_quote_view import populate_summary_table, product_display_name
+from .theme import OM, SUMMARY_TABLE_QSS
 
 NUMERIC_COLS = {"Members", "Covered", "Total Annual Premium", "Avg Premium (Covered)", "Profit Margin"}
 CURRENCY_COLS = {"Total Annual Premium", "Avg Premium (Covered)", "Profit Margin"}
@@ -147,9 +146,9 @@ class BatchDetailDialog(QtWidgets.QDialog):
         self.status.setText("building Category Breakdown…")
         QtWidgets.QApplication.processEvents()
         import openpyxl
-        from reporting.inputs import gather_cb_data
         from reporting.category_breakdown import write_category_breakdown
         from reporting.grid_extract import sheet_to_grid
+        from reporting.inputs import gather_cb_data
 
         cb_data = gather_cb_data(self.all_results, self.ctr.scheme, self.assump, ctr=self.ctr)
         wb = openpyxl.Workbook(); wb.remove(wb.active)
@@ -169,9 +168,9 @@ class BatchDetailDialog(QtWidgets.QDialog):
         self.status.setText("building Pricing Outputs…")
         QtWidgets.QApplication.processEvents()
         import openpyxl
+        from reporting.grid_extract import sheet_to_grid
         from reporting.inputs import gather_po_data
         from reporting.pricing_outputs import write_pricing_outputs
-        from reporting.grid_extract import sheet_to_grid
 
         po_data = gather_po_data(self.all_results, self.ctr.scheme, assump=self.assump, ctr=self.ctr)
         wb = openpyxl.Workbook(); wb.remove(wb.active)
@@ -190,6 +189,7 @@ class BatchDetailDialog(QtWidgets.QDialog):
         QtWidgets.QApplication.processEvents()
         try:
             from reporting import write_pricing_report
+
             from .file_access import output_directory
             out_dir = output_directory(self.out_dir)
             scheme = self.ctr.scheme

@@ -1,10 +1,12 @@
 from __future__ import annotations
-from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor
-from functools import partial
+
 import io
 import json
 import zipfile
+from concurrent.futures import ThreadPoolExecutor
+from functools import partial
+from pathlib import Path
+
 import polars as pl
 
 BUNDLE_NAME = "_snapshot_bundle.zip"

@@ -1,24 +1,24 @@
 from __future__ import annotations
 
-import time
 import datetime
+import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime as _datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 import polars as pl
-
-
+from ctr_loader.assumption_loader import get_assumptions, load_assumptions
+from ctr_loader.basis_loader import get_basis, load_basis
+from ctr_loader.ctr_loader_v2 import load_ctr
+from ctr_loader.products_registry import PRODUCT_REGISTRY
 from gap_config import get_settings
 from gap_config.storage import Storage, is_s3, join_location
+from pricing_engine.engine import build_context, price, price_all_products
+
 from .config import snapshot_folders
 from .file_access import input_file, output_directory
-from ctr_loader.basis_loader import load_basis, get_basis
-from ctr_loader.assumption_loader import load_assumptions, get_assumptions
-from ctr_loader.ctr_loader_v2 import load_ctr
-from pricing_engine.engine import price, build_context, price_all_products
-from ctr_loader.products_registry import PRODUCT_REGISTRY
 
 _PRODUCT_DISPLAY = {
     "gla":                 "GLA",
@@ -212,7 +212,7 @@ def _price_loaded_ctr(ctr, basis, assump, t: dict, _compute_t0: float,
     return result
 
 
-def list_db_schemes(status_filter: str = "success") -> "pl.DataFrame":
+def list_db_schemes(status_filter: str = "success") -> pl.DataFrame:
     settings = get_settings()
     if not settings.db_enabled:
         raise ValueError("Database access is disabled; configure GAP_DB_ENABLED and GAP_DB_CONNECTION_STRING")

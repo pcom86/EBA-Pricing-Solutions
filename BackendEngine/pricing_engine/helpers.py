@@ -1,23 +1,27 @@
 from __future__ import annotations
+
+import calendar
+import math
+import re
 from datetime import date
 from typing import Any
-import math
-import polars as pl
-import calendar
-import re
-from . import helpers_common
-from . import helpers_fc
-from .helpers_common import *
-from .helpers_fc import *
-from . import helpers_gla
-from .helpers_gla import *
-from . import helpers_education
-from .helpers_education import *
-from . import helpers_gip
-from .helpers_gip import *
-from . import helpers_tip
-from .helpers_tip import *
 
+import polars as pl
+
+from . import (
+    helpers_common,
+    helpers_education,
+    helpers_fc,
+    helpers_gip,
+    helpers_gla,
+    helpers_tip,
+)
+from .helpers_common import *
+from .helpers_education import *
+from .helpers_fc import *
+from .helpers_gip import *
+from .helpers_gla import *
+from .helpers_tip import *
 
 
 def apply_cover_caps(df, recipe, ctx, assump_tables, prior_results):

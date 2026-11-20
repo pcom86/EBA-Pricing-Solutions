@@ -3,18 +3,17 @@ from __future__ import annotations
 import dataclasses
 import hashlib
 import json
-import math
+import logging
 import time
 import uuid
 from collections import defaultdict
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
-from gap_config.storage import Storage
 from ctr_loader.ctr_schemas import SchemeRecord
+from gap_config.storage import Storage
 from rapidfuzz import fuzz
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +97,7 @@ def _hash_file(path, algo: str = "sha256") -> str:
     return h.hexdigest()
 
 
-def land_snapshot_bundle(s3: "LocalS3", snapshot_folder, snapshot_version_name: str, kind: str):
+def land_snapshot_bundle(s3: LocalS3, snapshot_folder, snapshot_version_name: str, kind: str):
     bundle_path = Path(snapshot_folder) / "_snapshot_bundle.zip"
     if not bundle_path.exists():
         return None
@@ -113,7 +112,7 @@ def land_snapshot_bundle(s3: "LocalS3", snapshot_folder, snapshot_version_name: 
     return content_hash
 
 
-def land_engine_version(s3: "LocalS3", engine_file_path=None) -> str | None:
+def land_engine_version(s3: LocalS3, engine_file_path=None) -> str | None:
     if engine_file_path is None:
         from . import engine as _engine_module
         engine_file_path = Path(_engine_module.__file__)
@@ -263,7 +262,7 @@ def _get_or_create_scheme(cur, ctr, case_id: str | None = None, quote_seq: int |
         if existing_biz_key is None:
             s = ctr.scheme
             internal_gla_code = s.scheme_codes.get("gla", "UNKNOWN")
-            _biz_ts = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+            _biz_ts = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
             _biz_quote = s.quote_number if s.quote_number is not None else "X"
             healed_biz_key = f"{_biz_ts}_{internal_gla_code}_{_biz_quote}_{ctr.ctr_fingerprint[:8]}"
             cur.execute(
@@ -293,7 +292,7 @@ def _get_or_create_scheme(cur, ctr, case_id: str | None = None, quote_seq: int |
     s = ctr.scheme
     internal_gla_code = s.scheme_codes.get("gla", "UNKNOWN")
 
-    _biz_ts = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+    _biz_ts = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
     _biz_quote = s.quote_number if s.quote_number is not None else "X"
     scheme_business_key = f"{_biz_ts}_{internal_gla_code}_{_biz_quote}_{ctr.ctr_fingerprint[:8]}"
 
@@ -582,7 +581,7 @@ def _insert_pricing_results(cur, run_id, df_result, member_id_map):
 
 
 def _resolve_and_insert_member_identities(cur, scheme_id, gla_df, run_id):
-    load_started_at = datetime.now(timezone.utc)
+    load_started_at = datetime.now(UTC)
     candidates_by_dob = _load_existing_identities_by_dob(cur, scheme_id, load_started_at)
     claimed_ids: set = set()
     new_identity_rows, queue_rows, member_id_map = [], [], {}
@@ -667,7 +666,7 @@ def load_run_to_db(conn_str: str, s3: LocalS3, ctr, df_result, parquet_local_pat
         result["timing"]["s3_write"] = time.perf_counter() - t0
 
         t0 = time.perf_counter()
-        started_at = datetime.now(timezone.utc)
+        started_at = datetime.now(UTC)
 
         basis_bundle_hash = None
         assumption_bundle_hash = None
@@ -727,7 +726,7 @@ def load_run_to_db(conn_str: str, s3: LocalS3, ctr, df_result, parquet_local_pat
 
         cur.execute(
             "UPDATE run SET status='success', completed_at=? WHERE run_id=?",
-            datetime.now(timezone.utc), run_id,
+            datetime.now(UTC), run_id,
         )
         result["timing"]["run_and_pricing_result"] = time.perf_counter() - t0
 

@@ -11,11 +11,9 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 
+import openpyxl
 import polars as pl
 import pytest
-
-import openpyxl
-
 from ctr_loader import ctr_loader_v2 as cl
 from ctr_loader.ctr_schemas import CTRBundle
 

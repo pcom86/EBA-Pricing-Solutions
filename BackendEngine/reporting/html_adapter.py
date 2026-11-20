@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import html as _html
 
 from .grid_extract import GridCell, GridSheet, sheet_to_grid
@@ -84,6 +85,7 @@ def grid_to_html_with_product_pills(grid: GridSheet, section_fill: str = "#A6A6A
 
 def build_full_report_html(cb: dict, po: dict, scheme_name: str = "") -> str:
     import openpyxl
+
     from . import category_breakdown as cbmod
     from . import pricing_outputs as pomod
 

@@ -10,17 +10,20 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-
 ROOT = Path(__file__).resolve().parent.parent
 
 
 class GuiIntegrationTests(unittest.TestCase):
 	def test_mounted_gui_pricing_views_and_reports(self):
-		from PySide6 import QtWidgets
 		import openpyxl
 		import polars as pl
 		from gap_config import ConfigurationError, get_settings
-		from gap_pricing_gui.file_access import batch_ctr_files, output_directory, validate_gui_settings
+		from gap_pricing_gui.file_access import (
+			batch_ctr_files,
+			output_directory,
+			validate_gui_settings,
+		)
+		from PySide6 import QtWidgets
 
 		self.assertEqual(os.environ.get("QT_QPA_PLATFORM"), "offscreen")
 		self.assertIn("GAP_GUI_TEST_CTR", os.environ, "Supply an approved mounted CTR via GAP_GUI_TEST_CTR")
@@ -49,8 +52,8 @@ class GuiIntegrationTests(unittest.TestCase):
 				with patch.object(QtWidgets.QMessageBox, "critical", side_effect=lambda *args: errors.append(args[1:])), \
 					 patch.object(QtWidgets.QMessageBox, "warning", side_effect=lambda *args: errors.append(args[1:])), \
 					 patch.object(QtWidgets.QMessageBox, "information", return_value=QtWidgets.QMessageBox.Ok):
-					from gap_pricing_gui.launch_gap_gui import main
 					from gap_pricing_gui import quote_runner
+					from gap_pricing_gui.launch_gap_gui import main
 					self.assertEqual(main(), 0)
 					window = app._gap_main_window
 
@@ -123,7 +126,9 @@ class GuiIntegrationTests(unittest.TestCase):
 						status_index = window.batch_model._cols.index("status")
 						self.assertTrue(all(row[status_index] == "OK" for row in window.batch_model._rows), window.batch_model._rows)
 						self.assertEqual(len(window._batch_cache), len(paths))
-						from gap_pricing_gui.batch_detail_dialog import BatchDetailDialog
+						from gap_pricing_gui.batch_detail_dialog import (
+							BatchDetailDialog,
+						)
 						source, (ctr, assump, results) = next(iter(window._batch_cache.items()))
 						detail = BatchDetailDialog(ctr, assump, results, source, out_dir=window.boutput.text(), parent=window)
 						detail._show_tab(1)

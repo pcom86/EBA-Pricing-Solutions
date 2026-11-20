@@ -1,17 +1,17 @@
 from __future__ import annotations
-from pathlib import Path
 
-import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.styles.cell_style import StyleArray
 
 from .constants import (
+    PO_BASIS_TITLE,
+    PO_BUILDUP_TITLE,
     PO_PRODUCT_DISPLAY,
-    PO_BUILDUP_TITLE, PO_TECH_TITLE, PO_BASIS_TITLE,
-    PO_SALARY_LABEL, PO_RATE_LABEL,
+    PO_RATE_LABEL,
+    PO_SALARY_LABEL,
+    PO_TECH_TITLE,
 )
-from .ext_fc_section import write_ext_fc_section, apply_ext_fc_column_widths
-
+from .ext_fc_section import apply_ext_fc_column_widths, write_ext_fc_section
 
 _TITLE_FONT     = Font(bold=True, size=12, color="000000")
 _TITLE_FILL     = PatternFill("solid", fgColor="92D050")
@@ -533,8 +533,7 @@ def _apply_widths(ws, n_products: int, min_width: float = 10.0, max_width: float
             if cell.value is None:
                 continue
             length = len(str(cell.value))
-            if length > longest:
-                longest = length
+            longest = max(longest, length)
         width = max(min_width, min(longest + 2, max_width))
         ws.column_dimensions[col_letter].width = width
 

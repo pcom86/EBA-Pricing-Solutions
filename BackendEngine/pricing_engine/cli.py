@@ -9,7 +9,6 @@ from pathlib import Path
 from gap_config import get_settings
 from gap_config.storage import local_directory, local_file
 
-
 logger = logging.getLogger(__name__)
 
 

@@ -10,8 +10,8 @@ The report writer is stubbed so no xlsx/html generation cost is paid.
 from __future__ import annotations
 
 import os
-import sys
 import runpy
+import sys
 import threading
 from collections.abc import Mapping
 from datetime import date
@@ -19,22 +19,21 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import polars as pl
-import pytest
-
 import pricing_engine.concurrent_runner as cr
+import pytest
 from pricing_engine import aggregation, async_state, cli
 from pricing_engine.engine import (
     PricingContext,
-    apply_cease_override,
-    build_context,
-    price,
-    price_all_products,
     _apply_addons,
     _coerce_limit,
     _load_and_index_members,
     _require_columns,
     _resolve_member_role,
     _resolve_rate_factors,
+    apply_cease_override,
+    build_context,
+    price,
+    price_all_products,
 )
 
 ENGINE_ROOT = Path(__file__).resolve().parents[2] / "BackendEngine"

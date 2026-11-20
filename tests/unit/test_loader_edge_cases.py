@@ -4,11 +4,10 @@ import json
 
 import polars as pl
 import pytest
-
 from ctr_loader.assumption_loader import _coerce_global, load_assumptions
+from ctr_loader.assumption_loader import _read_meta as read_assumption_meta
 from ctr_loader.basis_loader import _read_meta as read_basis_meta
 from ctr_loader.basis_loader import load_basis
-from ctr_loader.assumption_loader import _read_meta as read_assumption_meta
 
 
 @pytest.mark.unit
@@ -56,13 +55,13 @@ def test_load_assumptions_reads_manifest_and_all_global_types(tmp_path):
 
 @pytest.mark.unit
 def test_load_assumptions_rejects_empty_snapshot(tmp_path):
-    with pytest.raises(FileNotFoundError, match="No \.parquet files"):
+    with pytest.raises(FileNotFoundError, match=r"No \.parquet files"):
         load_assumptions(tmp_path, use_bundle=False)
 
 
 @pytest.mark.unit
 def test_load_basis_rejects_empty_snapshot(tmp_path):
-    with pytest.raises(FileNotFoundError, match="No \.parquet files"):
+    with pytest.raises(FileNotFoundError, match=r"No \.parquet files"):
         load_basis(tmp_path, use_bundle=False)
 
 

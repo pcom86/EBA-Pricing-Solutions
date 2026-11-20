@@ -36,7 +36,7 @@ class CategorySplitBar(QtWidgets.QWidget):
             mode = (category_split or {}).get(family, "")
             combo.blockSignals(True)
             idx = combo.findText(mode)
-            combo.setCurrentIndex(idx if idx >= 0 else 0)
+            combo.setCurrentIndex(max(idx, 0))
             combo.blockSignals(False)
 
     def values(self) -> dict[str, str]:

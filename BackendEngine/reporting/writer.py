@@ -1,22 +1,22 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from time import perf_counter
 
 import openpyxl
 
-from .inputs import gather_cb_data, gather_po_data
 from .category_breakdown import write_category_breakdown
-from .pricing_outputs import write_pricing_outputs
 from .html_adapter import build_full_report_html
+from .inputs import gather_cb_data, gather_po_data
 from .meta_engine import (
-    build_meta_rows,
-    build_engine_frame,
-    write_meta_sheet,
-    write_calc_companion_parquet,
     ENGINE_VERSION,
+    build_engine_frame,
+    build_meta_rows,
+    write_calc_companion_parquet,
+    write_meta_sheet,
 )
-import logging
+from .pricing_outputs import write_pricing_outputs
 
 logger = logging.getLogger(__name__)
 

@@ -1,14 +1,22 @@
 from __future__ import annotations
+
+import calendar
+import math
+import re
 from datetime import date
 from typing import Any
-import math
-import polars as pl
-import calendar
-import re
-from . import helpers_common
-from .helpers_common import _gip_asof, _gip_key_part, _gip_wp_months, _gipf, \
-    _vec_asof_by_gender, _vec_asof_cascade
 
+import polars as pl
+
+from . import helpers_common
+from .helpers_common import (
+    _gip_asof,
+    _gip_key_part,
+    _gip_wp_months,
+    _gipf,
+    _vec_asof_by_gender,
+    _vec_asof_cascade,
+)
 
 __all__ = [
     "_apply_tip_composite",
@@ -685,13 +693,14 @@ def _tip_compute_member_rows(df, LT):
         tax_opt = g.tip_tax_options.get(cat)
         pp_label = g.tip_payment_period.get(cat)
 
+        # Called only within this iteration, so loop variables are bound correctly.
         def _res(base):
-            if wspec == "N/A":
+            if wspec == "N/A":  # noqa: B023
                 return base
-            if wspec == "As Per Data":
-                add = L if val3_2 == "No" else 0.0
-            elif wspec == "Same For All":
-                add = emp_w if val3_2 == "No" else 0.0
+            if wspec == "As Per Data":  # noqa: B023
+                add = L if val3_2 == "No" else 0.0  # noqa: B023
+            elif wspec == "Same For All":  # noqa: B023
+                add = emp_w if val3_2 == "No" else 0.0  # noqa: B023
             else:
                 add = 0.0
             return base + add

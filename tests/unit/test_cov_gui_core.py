@@ -16,7 +16,6 @@ from types import SimpleNamespace
 
 import polars as pl
 import pytest
-
 from gap_config import ConfigurationError, load_settings
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -165,7 +164,7 @@ class TestConfig:
         assert config.DEFAULT_CTR_DIR == "IN_DIR"
         assert config.DEFAULT_BATCH_OUT == "OUT_DIR"
         with pytest.raises(AttributeError):
-            config.TOTALLY_UNKNOWN_NAME
+            config.TOTALLY_UNKNOWN_NAME  # noqa: B018
 
 
 # ---------------------------------------------------------------------------
@@ -563,6 +562,7 @@ class TestLaunchHelpers:
 
     def test_install_sigterm_handler(self):
         import signal as signal_mod
+
         from gap_pricing_gui.launch_gap_gui import _install_sigterm_handler
 
         class FakeSignals:

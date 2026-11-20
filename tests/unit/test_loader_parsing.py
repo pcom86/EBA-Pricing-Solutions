@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import polars as pl
 import pytest
-
-from ctr_loader.basis_loader import BasisBundle, load_basis
 from ctr_loader.assumption_loader import AssumptionsBundle, load_assumptions
+from ctr_loader.basis_loader import BasisBundle, load_basis
 
 
 @pytest.mark.unit

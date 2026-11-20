@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import importlib.metadata as metadata
+import logging
 import re
 import subprocess
 import sys
+from importlib import metadata
 from pathlib import Path
-import logging
 
 logger = logging.getLogger(__name__)
 

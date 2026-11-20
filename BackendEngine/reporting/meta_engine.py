@@ -1,11 +1,10 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import polars as pl
-
 
 ENGINE_VERSION = "v2026.07 (Rules 19-27 applied)"
 
@@ -39,11 +38,11 @@ def build_meta_rows(
         )
 
     active_products = ", ".join(
-        pkey.upper() for pkey in all_results.keys()
+        pkey.upper() for pkey in all_results
         if all_results[pkey] is not None and all_results[pkey].height > 0
     )
 
-    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    generated_at = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     ctr_path_str = str(ctr_path) if ctr_path is not None else ""
 
@@ -118,9 +117,8 @@ def build_engine_frame(all_results: dict[str, pl.DataFrame]) -> pl.DataFrame:
 
 
 from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.worksheet.worksheet import Worksheet
-from openpyxl.styles import Font, PatternFill, Alignment
-
 
 _HEADER_FONT = Font(bold=True, color="FFFFFF")
 _HEADER_FILL = PatternFill("solid", fgColor="305496")

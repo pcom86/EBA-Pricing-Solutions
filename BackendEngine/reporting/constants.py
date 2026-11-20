@@ -209,8 +209,4 @@ PO_TECH_ADDONS = {
     "accident_death":      [("PRO Premium ", "prb_premium")],
     "accident_disability": [("PRO Premium ", "prb_premium")],
     "dismemberment":       [("PRO Premium ", "prb_premium")],
-    "education": [
-        ("Cover to Continue", "ctc_premium"),
-        ("PRO Premium ",      "prb_premium"),
-    ],
 }

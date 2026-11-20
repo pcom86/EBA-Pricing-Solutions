@@ -1,6 +1,8 @@
 from __future__ import annotations
-from dataclasses import dataclass, field
+
+from dataclasses import dataclass
 from typing import Literal
+
 import polars as pl
 
 RatingType = Literal["yes_no", "accel_standalone"]
@@ -66,11 +68,6 @@ class ProductSpec:
     uses_gip_fee_table: bool = False
     uses_wp_categories: bool = False
     uses_ext_fc_params: bool = False
-    uses_gip_wp_loading: bool = False
-    uses_gip_rr_loading: bool = False
-    uses_gip_wp_base_inceptions: bool = False
-    uses_gip_annuity_salary_bands: bool = False
-    uses_gip_ip_loading: bool = False
     uses_tip_annuity_factors: bool = False
     uses_tip_payment_period_map: bool = False
     uses_tip_age_interp: bool = False

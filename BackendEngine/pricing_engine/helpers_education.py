@@ -1,15 +1,10 @@
 from __future__ import annotations
-from datetime import date
-from typing import Any
-import math
-import polars as pl
-import calendar
-import re
 
+import polars as pl
 
 __all__ = [
-    "_apply_education_guardian_composite",
     "_apply_educate_a_child_composite",
+    "_apply_education_guardian_composite",
     "_edu_guardian_salary_tier",
 ]
 

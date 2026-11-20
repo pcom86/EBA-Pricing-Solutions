@@ -3,7 +3,6 @@ from __future__ import annotations
 from datetime import date
 
 import pytest
-
 from ctr_loader.ctr_loader_v2 import _parse_member_sheet
 
 

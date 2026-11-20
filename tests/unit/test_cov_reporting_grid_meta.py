@@ -8,9 +8,8 @@ from types import SimpleNamespace
 import openpyxl
 import polars as pl
 import pytest
-from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
-
 import reporting
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from reporting import constants
 from reporting.grid_extract import GridCell, GridSheet, _format_value, sheet_to_grid
 from reporting.grid_sections import group_grid_by_sections
@@ -24,7 +23,6 @@ from reporting.meta_engine import (
     write_engine_sheet,
     write_meta_sheet,
 )
-
 
 # --------------------------------------------------------------------------
 # reporting/__init__.py lazy attribute loading
@@ -42,7 +40,7 @@ def test_lazy_attrs_resolve_and_cache():
     assert reporting.write_pricing_outputs is not None
     assert reporting.gather_po_data is not None
     with pytest.raises(AttributeError):
-        reporting.does_not_exist
+        reporting.does_not_exist  # noqa: B018
 
 
 # --------------------------------------------------------------------------

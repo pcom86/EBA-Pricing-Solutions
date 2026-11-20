@@ -68,10 +68,10 @@ class ViewPrewarmThread(QtCore.QThread):
     def run(self) -> None:
         try:
             import openpyxl
-            from reporting.inputs import gather_cb_data, gather_po_data
             from reporting.category_breakdown import write_category_breakdown
-            from reporting.pricing_outputs import write_pricing_outputs
             from reporting.grid_extract import sheet_to_grid
+            from reporting.inputs import gather_cb_data, gather_po_data
+            from reporting.pricing_outputs import write_pricing_outputs
 
             cb_data = gather_cb_data(self.per_product_results, self.ctr.scheme,
                                       self.assump, ctr=self.ctr)

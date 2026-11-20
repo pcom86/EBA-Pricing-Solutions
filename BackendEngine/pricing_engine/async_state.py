@@ -1,5 +1,5 @@
-import threading
 import logging
+import threading
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +80,9 @@ def _delete_dir(path: str) -> None:
 
 
 def sweep_stale_staging(staging_root: str, max_age_hours: float = 24.0) -> int:
-    import os, time, shutil
+    import os
+    import shutil
+    import time
     if not os.path.isdir(staging_root):
         return 0
     cutoff = time.time() - (max_age_hours * 3600)
@@ -92,6 +94,7 @@ def sweep_stale_staging(staging_root: str, max_age_hours: float = 24.0) -> int:
                 shutil.rmtree(p, ignore_errors=True)
                 removed += 1
         except Exception:
+            logger.warning("Could not sweep stale staging directory %s", p, exc_info=True)
             continue
     return removed
 

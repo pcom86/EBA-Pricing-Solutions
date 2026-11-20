@@ -7,7 +7,6 @@ import unittest
 import uuid
 from pathlib import Path
 
-
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 DOCKER_ENABLED = os.environ.get("GAP_RUN_DOCKER_TESTS") == "1"
 

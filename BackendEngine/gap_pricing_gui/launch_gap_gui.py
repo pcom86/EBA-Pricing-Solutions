@@ -1,11 +1,11 @@
 
+import logging
 import os
 import signal
 import sys
 import time
 import traceback
 from datetime import datetime
-import logging
 
 from gap_pricing_gui.file_access import validate_gui_settings
 
@@ -44,13 +44,14 @@ def main() -> int:
         )
 
     import threading
+
     from gap_pricing_gui import warm_state
 
     def _warm_ui():
         try:
             import polars
-            import reporting.inputs
             import reporting.category_breakdown
+            import reporting.inputs
             import reporting.pricing_outputs
             import reporting.writer
             _log("background warm: polars + reporting submodules ready.")
@@ -73,7 +74,9 @@ def main() -> int:
 
     def _sweep_stale():
         try:
-            import tempfile, os
+            import os
+            import tempfile
+
             from gap_pricing_gui import warm_state
             staging_root = str(settings.staging_dir)
             removed = warm_state.sweep_stale_staging(staging_root, max_age_hours=24.0)

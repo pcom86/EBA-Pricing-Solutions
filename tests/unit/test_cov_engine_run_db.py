@@ -18,11 +18,9 @@ from pathlib import Path
 
 import pandas as pd
 import polars as pl
-import pytest
-
 import pricing_engine.db_loader as dbl
+import pytest
 from ctr_loader.ctr_schemas import CTRBundle, SchemeRecord
-
 
 # ---------------------------------------------------------------------------
 # Fakes
