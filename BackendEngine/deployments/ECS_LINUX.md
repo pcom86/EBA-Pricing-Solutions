@@ -14,6 +14,57 @@ This document describes the application runtime contract. It does not provision 
 
 ## Build and check the headless image
 
+### Local Windows batch job (Docker Desktop)
+
+Start Docker Desktop in Linux container mode under your normal Windows account.
+The launcher uses CMD and an approved local Python 3 interpreter (standard
+library only). No PowerShell scripts, execution-policy changes or elevation
+are required. If `python.exe` is not on PATH, set `GAP_LOCAL_PYTHON` to the
+full path of the approved interpreter. Your account still needs IT-authorized
+access to Docker Desktop's Linux engine. From the solution root in
+PowerShell or Command Prompt, run:
+
+```powershell
+.\BackendEngine\run-local.cmd
+```
+
+The [Windows launcher](../run-local.cmd) builds the headless image using
+Docker's cache, runs one batch, and leaves reports in `BackendEngine\pricing_output`.
+Repeat the same command for the next batch. To check configuration without
+pricing any CTRs, run `.\BackendEngine\run-local.cmd --check-config`.
+
+The launcher prints its log path before contacting Docker. Each file in
+`BackendEngine\logs` records timestamped stages and the final exit code if
+the command finishes. A server check reports elapsed time every 5 seconds
+and stops after 30 seconds if Docker does not respond (exit 124, no build
+submitted). During the build, the log records BuildKit step numbers/status
+and a heartbeat every 10 seconds with elapsed time and time since output.
+Heartbeats show that the launcher is waiting, not a percentage complete.
+Actual build lines, errors, and pricing output stream to the terminal only.
+To follow the saved log from another PowerShell terminal, use
+`Get-Content -LiteralPath '<printed log path>' -Wait`.
+
+The [local Compose job](../compose.yaml) defaults to `Test\Batch run`,
+`basis_snapshots`, and `assumption_snapshots` as read-only inputs. To use
+different folders, set any of these in the same PowerShell window before
+running the job:
+
+```powershell
+$env:GAP_HOST_INPUT = 'C:\Pricing Data\ctrs'
+$env:GAP_HOST_BASIS = 'C:\Pricing Data\basis'
+$env:GAP_HOST_ASSUMPTIONS = 'C:\Pricing Data\assumptions'
+$env:GAP_HOST_OUTPUT = 'C:\Pricing Data\reports'
+```
+
+The three input folders must exist; the launcher creates the output folder if
+needed. Put CTRs directly in the input folder; mount
+snapshot **parent** folders, not individual versions. If version folder names
+differ from `config.json`, set `GAP_BASIS_SNAPSHOT` and
+`GAP_ASSUMPTION_SNAPSHOT` in PowerShell as well. This local job has no
+network or exposed ports; it does not configure QA or Fargate.
+
+### Standalone image build
+
 The Dockerfile and `.dockerignore` are in `BackendEngine`. From the solution root,
 build the headless image with the `BackendEngine` directory as its context:
 
