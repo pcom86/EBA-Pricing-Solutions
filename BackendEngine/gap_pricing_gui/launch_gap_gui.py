@@ -1,6 +1,5 @@
 
 import logging
-import os
 import signal
 import sys
 import time
@@ -49,22 +48,22 @@ def main() -> int:
 
     def _warm_ui():
         try:
-            import polars
+            import polars  # noqa: F401 - pre-import to warm module cache
             import reporting.category_breakdown
             import reporting.inputs
             import reporting.pricing_outputs
-            import reporting.writer
+            import reporting.writer  # noqa: F401 - pre-import to warm module cache
             _log("background warm: polars + reporting submodules ready.")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - warm-up must never crash the launcher
             _log(f"background warm skipped (reporting/polars): {type(e).__name__}: {e}")
         finally:
             warm_state.UI_WARM_DONE.set()
 
     def _warm_engine():
         try:
-            from gap_pricing_gui import quote_runner
+            from gap_pricing_gui import quote_runner  # noqa: F401 - pre-import to warm module cache
             _log("background warm: quote_runner ready.")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - warm-up must never crash the launcher
             _log(f"background warm skipped (quote_runner): {type(e).__name__}: {e}")
         finally:
             warm_state.ENGINE_WARM_DONE.set()
@@ -74,15 +73,15 @@ def main() -> int:
 
     def _sweep_stale():
         try:
-            import os
-            import tempfile
+            import os  # noqa: F401 - pre-import to warm module cache
+            import tempfile  # noqa: F401 - pre-import to warm module cache
 
             from gap_pricing_gui import warm_state
             staging_root = str(settings.staging_dir)
             removed = warm_state.sweep_stale_staging(staging_root, max_age_hours=24.0)
             if removed:
                 _log(f"cache sweep: removed {removed} stale staging folder(s).")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - cache sweep must never crash the launcher
             _log(f"cache sweep skipped: {type(e).__name__}: {e}")
 
     threading.Thread(target=_sweep_stale, name="gap-cache-sweep", daemon=True).start()
@@ -121,6 +120,6 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except Exception:
+    except Exception:  # noqa: BLE001 - top-level fatal handler must catch everything
         _log("FATAL during launch:\n" + traceback.format_exc())
         sys.exit(1)

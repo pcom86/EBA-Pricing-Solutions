@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import html as _html
 
-from .grid_extract import GridCell, GridSheet, sheet_to_grid
+from .grid_extract import GridSheet, sheet_to_grid
 
 
 def grid_to_html_table(grid: GridSheet) -> str:

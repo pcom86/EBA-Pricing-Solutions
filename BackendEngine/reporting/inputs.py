@@ -158,7 +158,7 @@ def _resolve_commission_rate(
         for pkey in CB_PRODUCTS:
             try:
                 total_net += float(subtotal_provider(pkey) or 0.0)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - per-product subtotal is best-effort
                 logger.warning(f"[commission] subtotal failed for {pkey}: {e}")
 
         if total_net <= 0:
@@ -816,7 +816,7 @@ def _po_profile_fc(fc_df):
     def _s(c):
         if c not in act.columns: return 0.0
         try: return float(act[c].sum())
-        except Exception: return _cs(c)
+        except Exception: return _cs(c)  # noqa: BLE001 - fall back to string-column sum on any dtype error
     n = int(act.height)
     salary = _s("annual_salary"); cover = _s("total_cover")
     main = _cs("primary_insured_person")
@@ -1674,7 +1674,7 @@ def _sum_col(df, col, safe=False):
     if safe:
         try:
             return float(df[col].sum())
-        except Exception:
+        except Exception:  # noqa: BLE001 - safe mode returns 0.0 on any dtype/compute error
             return 0.0
     return float(df[col].sum())
 
@@ -2087,7 +2087,7 @@ def _reallocate_cb_basic_pooled(prod: dict, split_mode: str = "Sum Assured", raw
             pl.col("product_active") & (pl.col("age") <= pl.col("ceasing_age"))
         )
         scheme_members = float(tt_active_df.height)
-        for cat_num in cats.keys():
+        for cat_num in cats:
             cat_member_counts[cat_num] = float(
                 tt_active_df.filter(pl.col("category_number") == cat_num).height
             )
@@ -2169,8 +2169,8 @@ def _ext_fc_row_calc(e, profit_rate, admin_rate, commission_pct, vat_pct):
 
 
 def _ext_fc_age_band_label(start_age, end_age):
-    s = int(round(start_age))
-    e = int(round(end_age))
+    s = round(start_age)
+    e = round(end_age)
     return f"{s}+" if e >= 100 else f"{s} to {e}"
 
 

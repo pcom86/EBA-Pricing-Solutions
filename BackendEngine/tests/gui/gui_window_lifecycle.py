@@ -8,11 +8,10 @@ import time
 import unittest
 from unittest.mock import patch
 
-from PySide6 import QtCore, QtWidgets
-
 from gap_config import ConfigurationError
-from gap_pricing_gui.main_window import GapWindow
 from gap_pricing_gui.launch_gap_gui import _install_sigterm_handler
+from gap_pricing_gui.main_window import GapWindow
+from PySide6 import QtCore, QtWidgets
 
 
 class WaitingThread(QtCore.QThread):

@@ -136,7 +136,7 @@ _COMB_EPOCH = datetime(2020, 1, 1)
 
 def sql_seq_guid() -> str:
     rnd = bytearray(uuid.uuid4().bytes[:10])
-    now = datetime.utcnow()
+    now = datetime.now(UTC).replace(tzinfo=None)
     days = (now - _COMB_EPOCH).days
     midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
     ticks = int((now - midnight).total_seconds() * 1000 / 3.333333)
@@ -587,7 +587,7 @@ def _resolve_and_insert_member_identities(cur, scheme_id, gla_df, run_id):
     new_identity_rows, queue_rows, member_id_map = [], [], {}
 
     for i, row in enumerate(gla_df.iter_rows(named=True)):
-        mid, method, score, needs_new, queue_entry = _resolve_member(
+        mid, _method, score, needs_new, queue_entry = _resolve_member(
             row["member_name"], row["date_of_birth"], row["gender"], row["annual_salary"],
             candidates_by_dob, claimed_ids,
         )
@@ -679,7 +679,7 @@ def load_run_to_db(conn_str: str, s3: LocalS3, ctr, df_result, parquet_local_pat
                 assumption_bundle_hash = land_snapshot_bundle(
                     s3, assumption_snapshot_folder, assumption_snapshot, "assumption")
             engine_version_hash = land_engine_version(s3)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - hashing is best-effort; DB load continues without it
             logger.warning(f"[db_loader] snapshot/engine hashing failed: {e}")
 
         cur.execute("SELECT COUNT(*) FROM run WHERE scheme_id = ?", scheme_id)
@@ -702,7 +702,7 @@ def load_run_to_db(conn_str: str, s3: LocalS3, ctr, df_result, parquet_local_pat
 
         try:
             _load_scheme_snapshot(cur, s3, scheme_id, run_id, ctr)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - scheme snapshot is best-effort; run load continues
             logger.warning(f"[db_loader] scheme snapshot load failed: {e}")
 
         snapshot_rows = []
@@ -734,7 +734,7 @@ def load_run_to_db(conn_str: str, s3: LocalS3, ctr, df_result, parquet_local_pat
         result["timing"]["total"] = time.perf_counter() - t_start
         result.update(status="success", run_id=run_id, scheme_id=scheme_id, rows=len(df_result))
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - top-level handler records the failure in result
         if conn:
             conn.rollback()
         result["error"] = str(e)

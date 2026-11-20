@@ -205,7 +205,7 @@ def test_load_ctr_missing_file_raises(tmp_path):
 def test_load_ctr_unparsable_file_raises(tmp_path):
     bad = tmp_path / "bad.ctr"
     bad.write_bytes(b"this is not a spreadsheet at all")
-    with pytest.raises(Exception):
+    with pytest.raises(Exception):  # noqa: B017 - unparsable input may raise several exception types
         cl.load_ctr(bad)
 
 

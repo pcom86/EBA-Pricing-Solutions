@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from datetime import date
+from typing import ClassVar
 
 import polars as pl
 import pytest
-
-from pricing_engine.engine import PricingContext, build_context
+from pricing_engine.engine import build_context
 from pricing_engine.helpers_common import (
     apply_factor,
     compute_ceasing_age,
@@ -45,14 +45,14 @@ def test_compute_ceasing_age_falls_back_to_nra_when_deferred_data_missing():
 def test_build_context_uses_scheme_size_and_product_limits():
     class DummyScheme:
         commencement_date = date(2025, 1, 1)
-        rating = {"gla": "Yes"}
+        rating: ClassVar = {"gla": "Yes"}
         region = "North"
         primary = "Primary"
         secondary = "Secondary"
 
     class DummyAssump:
-        globals = {"scheme_size_large_threshold": 2}
-        tables = {
+        globals: ClassVar = {"scheme_size_large_threshold": 2}
+        tables: ClassVar = {
             "product_limits": pl.DataFrame(
                 {
                     "product": ["gla"],

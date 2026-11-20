@@ -12,6 +12,7 @@ from unittest.mock import Mock, patch
 
 from gap_config import load_settings
 from gap_config.storage import Storage
+
 from tests.utilities.fake_s3 import FakeS3
 
 
@@ -49,7 +50,7 @@ class ReportTests(unittest.TestCase):
         loader = types.ModuleType("ctr_loader.ctr_loader_v2")
         loader.load_ctr = Mock(return_value=types.SimpleNamespace(scheme=types.SimpleNamespace(scheme_name="Example", quote_number=1)))
         polars = types.ModuleType("polars")
-        polars.read_parquet = Mock(return_value=types.SimpleNamespace(to_dicts=lambda: []))
+        polars.read_parquet = Mock(return_value=types.SimpleNamespace(to_dicts=list))
         modules = patch.dict(sys.modules, {"polars": polars, "reporting": self.reporter,
             "pricing_engine.engine": self.engine, "ctr_loader.ctr_loader_v2": loader})
         modules.start()

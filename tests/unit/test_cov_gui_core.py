@@ -75,13 +75,13 @@ class TestFileAccess:
         assert (tmp_path / "artifacts").is_dir()
 
     def test_input_directory_default_and_explicit(self, fa):
-        file_access, settings, root = fa
+        file_access, _settings, root = fa
         expected = (root / "input").resolve()
         assert file_access.input_directory() == expected
         assert file_access.input_directory("input") == expected
 
     def test_input_directory_rejects_bad_locations(self, fa):
-        file_access, settings, root = fa
+        file_access, _settings, root = fa
         for bad in ("", "   ", "s3://bucket/prefix", "https://x.invalid/y"):
             with pytest.raises(ConfigurationError):
                 file_access.input_directory(bad)
@@ -89,7 +89,7 @@ class TestFileAccess:
             file_access.input_directory(root / "missing")
 
     def test_input_file(self, fa):
-        file_access, settings, root = fa
+        file_access, _settings, root = fa
         f = root / "input" / "a.ctr"
         f.write_bytes(b"ctr")
         assert file_access.input_file(f) == f.resolve()
@@ -99,7 +99,7 @@ class TestFileAccess:
             file_access.input_file(root / "input")  # directory is not a file
 
     def test_batch_ctr_files_sorted_and_filtered(self, fa):
-        file_access, settings, root = fa
+        file_access, _settings, root = fa
         folder = root / "input"
         (folder / "b.CTR").write_bytes(b"x")
         (folder / "a.ctr").write_bytes(b"x")
@@ -109,12 +109,12 @@ class TestFileAccess:
         assert [p.name for p in paths] == ["a.ctr", "b.CTR"]
 
     def test_batch_ctr_files_empty(self, fa):
-        file_access, settings, root = fa
+        file_access, _settings, root = fa
         with pytest.raises(ConfigurationError, match="No .ctr files"):
             file_access.batch_ctr_files(root / "input")
 
     def test_output_directory_creates_and_validates(self, fa):
-        file_access, settings, root = fa
+        file_access, _settings, root = fa
         nested = file_access.output_directory("deep/nested/out")
         assert nested == (root / "deep/nested/out").resolve()
         assert nested.is_dir()

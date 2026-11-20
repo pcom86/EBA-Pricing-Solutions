@@ -18,11 +18,9 @@ from pathlib import Path
 
 import pandas as pd
 import polars as pl
-import pytest
-
 import pricing_engine.db_loader as dbl
+import pytest
 from ctr_loader.ctr_schemas import CTRBundle, SchemeRecord
-
 
 # ---------------------------------------------------------------------------
 # Fakes
@@ -456,7 +454,7 @@ class TestInsertPricingResults:
         inserts = [b for b in cur.batches
                    if "INSERT INTO pricing_result" in b[0]]
         assert len(inserts) == 1
-        sql, rows = inserts[0]
+        _sql, rows = inserts[0]
         assert len(rows) == 2               # None and unmapped skipped
         assert len(rows[0]) == 3 + len(dbl.FACT_COLUMNS)
         assert rows[0][0] == "run-1"
@@ -506,8 +504,8 @@ class TestGetOrCreateScheme:
         uuid.UUID(sid)  # returned value is a guid string
         sqls = cur.sql_texts()
         assert any("INSERT INTO case_" in s for s in sqls)
-        insert = [p for s, p in cur.executed
-                  if "INSERT INTO scheme (" in s][0]
+        insert = next(p for s, p in cur.executed
+                  if "INSERT INTO scheme (" in s)
         # scheme_id, internal_gla_code, quote_number ... fingerprint, path, case, seq, bizkey
         assert insert[0] == sid
         assert insert[1] == "GLA01"
@@ -623,8 +621,8 @@ class TestLoadSchemeSnapshot:
 
         sqls = cur.sql_texts()
         assert any("INSERT INTO scheme_snapshot" in s for s in sqls)
-        params = [p for s, p in cur.executed
-                  if "INSERT INTO scheme_snapshot" in s][0]
+        params = next(p for s, p in cur.executed
+                  if "INSERT INTO scheme_snapshot" in s)
         assert params[0] == "run-1"
         assert params[1] == "sid-1"
         assert json.loads(params[3]) == ["gla", "gip"]
@@ -632,8 +630,8 @@ class TestLoadSchemeSnapshot:
         assert json.loads(params[5]) == ["w1"]
 
         assert s3.put_calls == ["member_sheets/run-1/gla_sheet.parquet"]
-        manifest = [b for b in cur.batches
-                    if "INSERT INTO member_sheet_manifest" in b[0]][0][1]
+        manifest = next(b for b in cur.batches
+                    if "INSERT INTO member_sheet_manifest" in b[0])[1]
         assert manifest[0][1] == "gla_sheet"
         assert manifest[0][3] == 2       # row count
         assert manifest[0][4] == 4       # col count
@@ -642,8 +640,8 @@ class TestLoadSchemeSnapshot:
         cur = FakeCursor()
         s3 = FakeS3()
         dbl._load_scheme_snapshot(cur, s3, "s", "r", _ctr(warnings=[]))
-        params = [p for s, p in cur.executed
-                  if "INSERT INTO scheme_snapshot" in s][0]
+        params = next(p for s, p in cur.executed
+                  if "INSERT INTO scheme_snapshot" in s)
         assert params[5] is None
 
 
@@ -731,8 +729,8 @@ class TestLoadRunToDb:
         assert result["scheme_id"] == "sid-x"
         assert not any("INSERT INTO scheme (" in s for s in cur.sql_texts())
         # rerun_number = existing count + 1 -> 4 in run insert params
-        run_insert = [p for s, p in cur.executed
-                      if "INSERT INTO run (" in s][0]
+        run_insert = next(p for s, p in cur.executed
+                      if "INSERT INTO run (" in s)
         assert run_insert[11] == 4
 
     def test_connect_failure_returns_failed(self, monkeypatch):

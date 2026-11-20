@@ -333,7 +333,7 @@ class GapWindow(QtWidgets.QMainWindow):
             self.status.showMessage(
                 f"Category Breakdown: {self.result.scheme_name} (split preview -- not saved to CTR)"
             )
-        except Exception:
+        except Exception:  # noqa: BLE001 - surface any recalculation failure to the user
             import traceback
             QtWidgets.QMessageBox.critical(self, "Split recalculation failed", traceback.format_exc())
         finally:
@@ -464,7 +464,7 @@ class GapWindow(QtWidgets.QMainWindow):
             self.status.showMessage(
                 f"Pricing Outputs: {self.result.scheme_name} (express-over-GLA preview -- not saved to CTR)"
             )
-        except Exception:
+        except Exception:  # noqa: BLE001 - surface any recalculation failure to the user
             import traceback
             QtWidgets.QMessageBox.critical(self, "Express-over-GLA recalculation failed", traceback.format_exc())
         finally:
@@ -585,7 +585,7 @@ class GapWindow(QtWidgets.QMainWindow):
             self.status.showMessage(
                 f"Pricing Outputs: {self.result.scheme_name} (priced margins preview -- not saved to CTR)"
             )
-        except Exception:
+        except Exception:  # noqa: BLE001 - surface any recalculation failure to the user
             import traceback
             QtWidgets.QMessageBox.critical(self, "Priced Margins recalculation failed", traceback.format_exc())
         finally:
@@ -662,7 +662,7 @@ class GapWindow(QtWidgets.QMainWindow):
                 f"(rate basis preview -- not saved to CTR; other products' "
                 f"commission may shift slightly due to scheme-wide tiering)"
             )
-        except Exception:
+        except Exception:  # noqa: BLE001 - surface any recalculation failure to the user
             import traceback
             QtWidgets.QMessageBox.critical(self, "Rate Basis recalculation failed", traceback.format_exc())
         finally:
@@ -713,7 +713,7 @@ class GapWindow(QtWidgets.QMainWindow):
 
         try:
             df = list_db_schemes(status_filter="success")
-        except Exception:
+        except Exception:  # noqa: BLE001 - surface any DB failure to the user
             import traceback
             QtWidgets.QMessageBox.critical(self, "DB load failed", traceback.format_exc())
             return
@@ -811,7 +811,7 @@ class GapWindow(QtWidgets.QMainWindow):
             else:
                 from .quote_runner import price_quote
                 res = price_quote(p, progress_cb=self._progress)
-        except Exception:
+        except Exception:  # noqa: BLE001 - surface any pricing failure to the user
             import traceback
             self._set_busy(False, "ERROR")
             QtWidgets.QMessageBox.critical(self, "Pricing failed", traceback.format_exc())
@@ -840,7 +840,7 @@ class GapWindow(QtWidgets.QMainWindow):
             from .quote_runner import save_report
             p = save_report(self.result)
             QtWidgets.QMessageBox.information(self, "Saved", f"Report written:\n{p}")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - surface any save failure to the user
             QtWidgets.QMessageBox.critical(self, "Save failed", str(e))
 
     def on_save_html(self) -> None:
@@ -853,7 +853,7 @@ class GapWindow(QtWidgets.QMainWindow):
             p = save_report(self.result, write_xlsx=False, write_parquet=False, write_html=True)
             self.status.showMessage(f"HTML report saved: {p.name}")
             QtWidgets.QMessageBox.information(self, "Saved", f"HTML report written:\n{p}")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - surface any save failure to the user
             self.status.showMessage("HTML save failed")
             QtWidgets.QMessageBox.critical(self, "Save failed", str(e))
 

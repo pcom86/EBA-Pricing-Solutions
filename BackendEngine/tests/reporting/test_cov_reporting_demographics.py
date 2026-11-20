@@ -6,9 +6,7 @@ from types import SimpleNamespace
 
 import polars as pl
 import pytest
-
 from reporting import demographics as dem
-
 
 # --------------------------------------------------------------------------
 # fixtures

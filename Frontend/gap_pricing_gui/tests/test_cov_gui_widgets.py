@@ -16,9 +16,8 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import polars as pl
 import pytest
-from PySide6 import QtCore, QtGui, QtWidgets
-
 from gap_config import ConfigurationError, load_settings
+from PySide6 import QtCore, QtGui, QtWidgets
 
 
 @pytest.fixture(scope="session")
@@ -219,8 +218,8 @@ class TestWorkers:
         assert len(got) == 1 and "batch boom" in got[0]
 
     def _patch_reporting_fakes(self, monkeypatch):
-        import reporting.inputs as ri
         import reporting.category_breakdown as rcb
+        import reporting.inputs as ri
         import reporting.pricing_outputs as rpo
         monkeypatch.setattr(ri, "gather_cb_data", lambda *a, **k: {"cb": 1})
         monkeypatch.setattr(ri, "gather_po_data",
@@ -305,8 +304,8 @@ class TestGridView:
         assert c is not None and c.isValid()
 
     def test_populate_table_from_grid(self, qapp):
-        from reporting.grid_extract import GridSheet
         from gap_pricing_gui.grid_view import populate_table_from_grid
+        from reporting.grid_extract import GridSheet
         grid = GridSheet(title="t", n_rows=2, n_cols=2, rows=[
             [_cell("h1", bold=True, fill="#FF0000", font_color="FFFFFF",
                    align="center"),
@@ -368,8 +367,8 @@ class TestGridView:
         return GridSheet(title="t", n_rows=4, n_cols=3, rows=rows)
 
     def test_product_pill_grid_view(self, qapp):
-        from reporting.grid_extract import GridSheet
         from gap_pricing_gui.grid_view import ProductPillGridView
+        from reporting.grid_extract import GridSheet
         view = ProductPillGridView()
         view.set_grid(self._sectioned_grid())
         buttons = view.pill_group.buttons()
@@ -490,8 +489,8 @@ class TestPoView:
         return GridSheet(title="po", n_rows=len(rows), n_cols=4, rows=rows)
 
     def test_filter_po_grid_to_active(self):
-        from reporting.grid_extract import GridSheet
         from gap_pricing_gui.po_view import filter_po_grid_to_active
+        from reporting.grid_extract import GridSheet
         grid = self._po_grid()
         out = filter_po_grid_to_active(grid, ["gla", "fc"], ["gla"])
         assert out is not grid
@@ -569,7 +568,9 @@ class TestSingleQuoteView:
 
     def test_populate_summary_table(self, qapp):
         from gap_pricing_gui.single_quote_view import (
-            build_product_summary_df, populate_summary_table)
+            build_product_summary_df,
+            populate_summary_table,
+        )
         table = QtWidgets.QTableWidget()
         df = build_product_summary_df(_fake_res())
         populate_summary_table(table, df)
@@ -648,8 +649,7 @@ class TestSingleQuoteView:
 
 class TestBatchDetailDialog:
     def test_build_batch_product_summary_df(self):
-        from gap_pricing_gui.batch_detail_dialog import (
-            build_batch_product_summary_df)
+        from gap_pricing_gui.batch_detail_dialog import build_batch_product_summary_df
         frames = _product_frames()
         df = build_batch_product_summary_df(["gla", "fc"], frames)
         assert df.height == 2
@@ -685,8 +685,8 @@ class TestBatchDetailDialog:
             dlg.close()
 
     def test_dialog_lazy_tabs(self, qapp, tmp_path, monkeypatch):
-        import reporting.inputs as ri
         import reporting.category_breakdown as rcb
+        import reporting.inputs as ri
         import reporting.pricing_outputs as rpo
         monkeypatch.setattr(ri, "gather_cb_data", lambda *a, **k: {"cb": 1})
         monkeypatch.setattr(ri, "gather_po_data",
@@ -859,8 +859,8 @@ def window(qapp, tmp_path, monkeypatch):
 
 
 def _patch_mw_reporting(monkeypatch):
-    import reporting.inputs as ri
     import reporting.category_breakdown as rcb
+    import reporting.inputs as ri
     import reporting.pricing_outputs as rpo
     monkeypatch.setattr(ri, "gather_cb_data", lambda *a, **k: {"cb": 1})
     monkeypatch.setattr(ri, "gather_po_data",

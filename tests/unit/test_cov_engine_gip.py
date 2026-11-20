@@ -127,7 +127,7 @@ def gip_scenario(gip_tables):
     for r in esc_rows:
         p = _num(r["esc_pct"])
         if p is not None:
-            esc_by_key.setdefault(str(int(round(p * 100))), p)
+            esc_by_key.setdefault(str(round(p * 100)), p)
 
     nra_map = {int(r["nra"]): r for r in nra_tbl.iter_rows(named=True)}
     # af.nra stores the interpolation table's age_lookup value; map it back
@@ -753,7 +753,7 @@ def _first_ctr_with(product_key):
     for path in sorted(CTR_TEST_DIR.rglob("*.ctr")):
         try:
             ctr = load_ctr(path)
-        except Exception:
+        except Exception:  # noqa: BLE001, S112 - skip unparsable CTR fixtures
             continue
         if product_key in ctr.active_products:
             return ctr

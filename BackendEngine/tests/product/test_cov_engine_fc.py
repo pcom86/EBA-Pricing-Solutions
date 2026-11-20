@@ -20,7 +20,6 @@ from types import SimpleNamespace
 
 import polars as pl
 import pytest
-
 from ctr_loader.assumption_loader import get_assumptions
 from ctr_loader.basis_loader import get_basis
 from ctr_loader.ctr_loader_v2 import load_ctr
@@ -538,21 +537,21 @@ def test_fc_composite_missing_assump_tables(fc_tables, fc_scheme,
 # ---------------------------------------------------------------------------
 
 def _ext_scheme(**kw):
-    base = dict(
-        ext_fc_parents_selected={1: "Yes"},
-        ext_fc_extended_family_selected={1: "Yes"},
-        ext_fc_pct_male={1: 0.60},
-        ext_fc_avg_salary={1: 120_000.0},
-        ext_fc_parent_dist_available={1: "No"},
-        ext_fc_family_dist_available={1: "No"},
-        ext_fc_age_bands={1: {
+    base = {
+        "ext_fc_parents_selected": {1: "Yes"},
+        "ext_fc_extended_family_selected": {1: "Yes"},
+        "ext_fc_pct_male": {1: 0.60},
+        "ext_fc_avg_salary": {1: 120_000.0},
+        "ext_fc_parent_dist_available": {1: "No"},
+        "ext_fc_family_dist_available": {1: "No"},
+        "ext_fc_age_bands": {1: {
             "parents": [{"start_age": 50, "end_age": 75, "cover": 20_000.0}],
             "extended_family": [{"start_age": 18, "end_age": 65,
                                  "cover": 10_000.0},
                                 {"start_age": 66, "end_age": 80,
                                  "cover": 5_000.0}],
         }},
-    )
+    }
     base.update(kw)
     return SchemeRecord(**base)
 
@@ -769,7 +768,7 @@ def _first_ctr_with(product_key):
     for path in sorted(CTR_TEST_DIR.rglob("*.ctr")):
         try:
             ctr = load_ctr(path)
-        except Exception:
+        except Exception:  # noqa: BLE001, S112 - skip unparsable CTR fixtures
             continue
         if product_key in ctr.active_products:
             return ctr

@@ -210,6 +210,6 @@ class BatchDetailDialog(QtWidgets.QDialog):
             html_path = workbook_path.with_suffix(".html")
             self.status.setText(f"HTML report saved: {html_path.name}")
             QtWidgets.QMessageBox.information(self, "Saved", f"HTML report written:\n{html_path}")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - surface any save failure to the user
             self.status.setText("HTML save failed")
             QtWidgets.QMessageBox.critical(self, "Save failed", str(e))

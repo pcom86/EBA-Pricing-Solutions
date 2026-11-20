@@ -11,10 +11,9 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import polars as pl
-import pytest
-
-import pricing_engine.engine_paths as engine_paths
 import pricing_engine.helpers as helpers_mod
+import pytest
+from pricing_engine import engine_paths
 from pricing_engine.helpers import apply_cover_caps, apply_special_premium
 from pricing_engine.helpers_common import (
     _apply_baseline_yr,
@@ -65,6 +64,11 @@ from pricing_engine.helpers_common import (
     zero_addon,
     zero_if_status,
 )
+from pricing_engine.helpers_education import (
+    _apply_educate_a_child_composite,
+    _apply_education_guardian_composite,
+    _edu_guardian_salary_tier,
+)
 from pricing_engine.helpers_gla import (
     _apply_ti_scales_gla,
     _cap_by_lsdb_or_gla,
@@ -72,11 +76,6 @@ from pricing_engine.helpers_gla import (
     attach_gla_cover_for_ti,
     co_premium_gla,
     co_premium_lsdb,
-)
-from pricing_engine.helpers_education import (
-    _apply_educate_a_child_composite,
-    _apply_education_guardian_composite,
-    _edu_guardian_salary_tier,
 )
 from pricing_engine.recipes import RECIPES
 

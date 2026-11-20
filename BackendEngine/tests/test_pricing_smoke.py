@@ -32,7 +32,7 @@ class PricingSmokeTests(unittest.TestCase):
 				if environment.get(variable):
 					command.extend([option, environment[variable]])
 			result = subprocess.run(command, cwd=ROOT, env=environment, capture_output=True,
-				text=True, encoding="utf-8", errors="replace", timeout=600)
+				text=True, encoding="utf-8", errors="replace", timeout=600, check=False)
 			self.assertEqual(result.returncode, 0, (result.stdout + result.stderr)[-12000:])
 			workbooks = list((work / "output").glob("*.xlsx"))
 			parquets = list((work / "output").glob("*_calc.parquet"))

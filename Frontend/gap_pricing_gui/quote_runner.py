@@ -9,13 +9,12 @@ from pathlib import Path
 from typing import Any
 
 import polars as pl
-from ctr_loader.assumption_loader import get_assumptions, load_assumptions
-from ctr_loader.basis_loader import get_basis, load_basis
+from ctr_loader.assumption_loader import get_assumptions
+from ctr_loader.basis_loader import get_basis
 from ctr_loader.ctr_loader_v2 import load_ctr
-from ctr_loader.products_registry import PRODUCT_REGISTRY
 from gap_config import get_settings
 from gap_config.storage import Storage, is_s3, join_location
-from pricing_engine.engine import build_context, price, price_all_products
+from pricing_engine.engine import build_context, price_all_products
 
 from .config import snapshot_folders
 from .file_access import input_file, output_directory
@@ -356,48 +355,47 @@ def save_report(
     _consumer_count = 1 if _will_db_load else 0
     _warm_state_cleanup.register_local_dir(str(local_dir), _consumer_count)
 
-    if settings.db_enabled and local_parquet_ok:
-        if not getattr(result, "_db_load_started", False):
-            result._db_load_started = True
-            import threading
+    if settings.db_enabled and local_parquet_ok and not getattr(result, "_db_load_started", False):
+        result._db_load_started = True
+        import threading
 
-            def _db_worker(parquet_path=local_parquet_path,
-                            ctr_bundle=result.ctr_bundle,
-                            scheme_name=result.scheme_name):
-                from gap_pricing_gui import warm_state
-                warm_state.db_write_started()
-                try:
-                    import pandas as pd
-                    from pricing_engine.db_loader import load_run_to_db
-
-                    df_result = pd.DataFrame(pl.read_parquet(parquet_path).to_dicts())
-                    s3 = Storage(settings.artifact_root)
-                    db_summary = load_run_to_db(
-                        settings.db_connection_string, s3, ctr_bundle, df_result, parquet_path,
-                        basis_snapshot=Path(BASIS_SNAP).name,
-                        assumption_snapshot=Path(ASSUMP_SNAP).name,
-                        basis_snapshot_folder=BASIS_SNAP,
-                        assumption_snapshot_folder=ASSUMP_SNAP,
-                    )
-                    if db_summary["status"] == "success":
-                        _t = db_summary.get("timing", {})
-                        _breakdown = " | ".join(f"{k}={v:.2f}s" for k, v in _t.items())
-                        logger.info(f"[db_loader] run {db_summary['run_id']} loaded "
-                              f"({db_summary.get('rows', 0)} rows) -- {_breakdown}")
-                    else:
-                        logger.info(f"[db_loader] load failed for {scheme_name}: {db_summary['error']}")
-                except Exception as e:
-                    logger.warning(f"[db_loader] unexpected error (quote save unaffected): {e}")
-                finally:
-                    warm_state.db_write_finished()
-                    warm_state.release_local_dir(str(local_dir))
-
+        def _db_worker(parquet_path=local_parquet_path,
+                        ctr_bundle=result.ctr_bundle,
+                        scheme_name=result.scheme_name):
+            from gap_pricing_gui import warm_state
+            warm_state.db_write_started()
             try:
-                threading.Thread(target=_db_worker, name="gap-db-load", daemon=True).start()
-            except Exception:
-                result._db_load_started = False
-                _warm_state_cleanup.register_local_dir(str(local_dir), 0)
-                raise
+                import pandas as pd
+                from pricing_engine.db_loader import load_run_to_db
+
+                df_result = pd.DataFrame(pl.read_parquet(parquet_path).to_dicts())
+                s3 = Storage(settings.artifact_root)
+                db_summary = load_run_to_db(
+                    settings.db_connection_string, s3, ctr_bundle, df_result, parquet_path,
+                    basis_snapshot=Path(BASIS_SNAP).name,
+                    assumption_snapshot=Path(ASSUMP_SNAP).name,
+                    basis_snapshot_folder=BASIS_SNAP,
+                    assumption_snapshot_folder=ASSUMP_SNAP,
+                )
+                if db_summary["status"] == "success":
+                    _t = db_summary.get("timing", {})
+                    _breakdown = " | ".join(f"{k}={v:.2f}s" for k, v in _t.items())
+                    logger.info(f"[db_loader] run {db_summary['run_id']} loaded "
+                          f"({db_summary.get('rows', 0)} rows) -- {_breakdown}")
+                else:
+                    logger.info(f"[db_loader] load failed for {scheme_name}: {db_summary['error']}")
+            except Exception as e:  # noqa: BLE001 - DB load is best-effort; quote save must not fail
+                logger.warning(f"[db_loader] unexpected error (quote save unaffected): {e}")
+            finally:
+                warm_state.db_write_finished()
+                warm_state.release_local_dir(str(local_dir))
+
+        try:
+            threading.Thread(target=_db_worker, name="gap-db-load", daemon=True).start()
+        except Exception:
+            result._db_load_started = False
+            _warm_state_cleanup.register_local_dir(str(local_dir), 0)
+            raise
 
     if write_xlsx:
         return xlsx_path

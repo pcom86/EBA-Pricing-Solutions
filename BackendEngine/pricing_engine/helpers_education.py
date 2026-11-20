@@ -53,7 +53,7 @@ def _apply_education_guardian_composite(df: pl.DataFrame,
             tier: float(row[col]) for tier, col in sal_col_map.items() if col in row
         }
     grid_ages_sorted = sorted(cover_by_age.keys())
-    min_age, max_age = grid_ages_sorted[0], grid_ages_sorted[-1]
+    min_age, _max_age = grid_ages_sorted[0], grid_ages_sorted[-1]
 
     def _asof_age(target_age: int) -> int | None:
         if target_age < min_age:

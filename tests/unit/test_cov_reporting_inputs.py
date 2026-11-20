@@ -822,7 +822,7 @@ def test_po_gip_tip_margins_and_buildups():
     assert mg["admin"] == pytest.approx(0.10)
 
     bu = inp._po_buildup_gip(df, a, ctr)
-    assert [r[0] for r in bu["tech"]][0] == "Net Risk Premium"
+    assert next(r[0] for r in bu["tech"]) == "Net Risk Premium"
     assert [r[0] for r in bu["basis"]][-1] == "Gross Risk Prem "
     assert bu["cover"] == pytest.approx(1_710_000.0 * 12)
 

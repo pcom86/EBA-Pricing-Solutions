@@ -22,7 +22,7 @@ def main() -> int:
         try:
             result = subprocess.run(
                 [sys.executable, "-B", "-m", "unittest", *arguments],
-                cwd=ROOT, env=environment, timeout=1800,
+                cwd=ROOT, env=environment, timeout=1800, check=False,
             )
         except subprocess.TimeoutExpired:
             print("Container test suite exceeded its 30-minute timeout.", file=sys.stderr)

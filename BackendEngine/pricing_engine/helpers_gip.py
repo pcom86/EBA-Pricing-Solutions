@@ -1,14 +1,10 @@
 from __future__ import annotations
 
 import calendar
-import math
-import re
 from datetime import date
-from typing import Any
 
 import polars as pl
 
-from . import helpers_common
 from .helpers_common import (
     _gip_asof,
     _gip_key_part,
@@ -82,7 +78,7 @@ def _apply_gip_composite(df: pl.DataFrame, spec: dict, basis_tables: dict,
     wpann = {int(r["wp_raw"]): int(r["wp_annuity"]) for r in B["wp_annuity_mapping"].filter(pl.col("product") == "gip").iter_rows(named=True)}
     nra_map = {int(r["nra"]): r for r in B["annuity_nra_interpolation"].filter(pl.col("product") == "gip").iter_rows(named=True)}
     hcc = {r["param_name"]: float(r["param_value"]) for r in B["gip_hcc_basis"].filter(pl.col("product") == "gip").iter_rows(named=True)}
-    HCC_RATE = hcc["hcc_pricing_rate"]
+    hcc["hcc_pricing_rate"]
     J5 = hcc["hcc_reduction_factor"]
 
     tx = (assump_tables["tax_tables"].filter(pl.col("tax_year") == "2026-2027_gip")
@@ -495,7 +491,7 @@ def _gip_annuity_fs_fast(FO, FR, af_map, sal_col, BL, esc_map, esc_pct,
         return 0.0
     esc_row = esc_map.get(esc_pct)
     if esc_row is None:
-        try: esc_row = esc_map.get(int(round(float(esc_pct)*100))/100.0)
+        try: esc_row = esc_map.get(round(float(esc_pct)*100)/100.0)
         except (TypeError, ValueError): esc_row = None
     if esc_row is None:
         return FO
@@ -540,7 +536,7 @@ def _gip_build_lookup_tables(basis_tables, assump_tables, ctx):
         if _er["esc_pct"] not in esc_map:
             esc_map[_er["esc_pct"]] = _er
     def _esc_grid(_e):
-        try: return int(round(float(_e) * 100)) / 100.0
+        try: return round(float(_e) * 100) / 100.0
         except (TypeError, ValueError): return _e
     for _er in _esc_tbl.iter_rows(named=True):
         _gk = _esc_grid(_er["esc_pct"])
@@ -634,7 +630,7 @@ def _gip_compute_member_rows(df, L, basis_tables):
     wpann = L["wpann"]
     nra_map = L["nra_map"]
     af_map = L["af_map"]
-    HCC_RATE = L["HCC_RATE"]
+    L["HCC_RATE"]
     J5 = L["J5"]
     bands = L["bands"]
     rebate = L["rebate"]
@@ -692,7 +688,7 @@ def _gip_compute_member_rows(df, L, basis_tables):
         K = row.get("gender")
         I = _gipf(row.get("annual_salary"))
         J = _gipf(row.get("monthly_salary")) or (I / 12.0)
-        M = int(round(_gipf(row.get("nra_final") if row.get("nra_final") is not None else row.get("nra"))))
+        M = round(_gipf(row.get("nra_final") if row.get("nra_final") is not None else row.get("nra")))
         L_ = _gipf(row.get("waiver"))
         member_hcc = row.get("hcc_waiver")
         dob = row.get("date_of_birth")
@@ -838,7 +834,7 @@ def _gip_compute_member_rows(df, L, basis_tables):
             DB = 0.0
         else:
             AT = AT_nom if AS == "Nominal Amount" else _gipf(member_hcc)
-            dob_d = dob if isinstance(dob, date) else dob
+            dob_d = dob
             ret = _gip_eomonth(dob_d.year + M, dob_d.month)
             mtr = round(12 * _gip_yearfrac_30_360(comm, ret))
             esc_f = (1 + AV) ** max((AR - 12) / 12, 0)
@@ -870,7 +866,7 @@ def _gip_eomonth(y, m):
 def _gip_esc_key(esc_pct):
     if esc_pct is None:
         return "0"
-    return str(int(round(float(esc_pct) * 100)))
+    return str(round(float(esc_pct) * 100))
 
 
 def _gip_finalize_dataframe(df, results, _gip_excluded):

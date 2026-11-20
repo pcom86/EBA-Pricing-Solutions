@@ -10,17 +10,16 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class GuiIntegrationTests(unittest.TestCase):
     def test_mounted_gui_pricing_views_and_reports(self):
-        from PySide6 import QtWidgets
         import openpyxl
         import polars as pl
         from gap_config import get_settings
         from gap_pricing_gui.file_access import batch_ctr_files, validate_gui_settings
+        from PySide6 import QtWidgets
 
         self.assertEqual(os.environ.get("QT_QPA_PLATFORM"), "offscreen")
         self.assertIn("GAP_GUI_TEST_CTR", os.environ, "Supply an approved mounted CTR via GAP_GUI_TEST_CTR")
@@ -37,14 +36,14 @@ class GuiIntegrationTests(unittest.TestCase):
 
         app = QtWidgets.QApplication.instance() or QtWidgets.QApplication([])
         errors = []
-        with tempfile.TemporaryDirectory(prefix="gui-test-", dir=settings.output_dir) as output:
+        with tempfile.TemporaryDirectory(prefix="gui-test-", dir=settings.output_dir) as output:  # noqa: SIM117
             with patch.dict(os.environ, {"GAP_OUTPUT_DIR": output}):
                 get_settings.cache_clear()
                 with patch.object(QtWidgets.QMessageBox, "critical", side_effect=lambda *args: errors.append(args[1:])), \
                     patch.object(QtWidgets.QMessageBox, "warning", side_effect=lambda *args: errors.append(args[1:])), \
                     patch.object(QtWidgets.QMessageBox, "information", return_value=QtWidgets.QMessageBox.Ok):
-                    from gap_pricing_gui.launch_gap_gui import main
                     from gap_pricing_gui import quote_runner
+                    from gap_pricing_gui.launch_gap_gui import main
                     self.assertEqual(main(), 0)
                     window = app._gap_main_window
 
@@ -88,17 +87,17 @@ class GuiIntegrationTests(unittest.TestCase):
                         self.assertTrue(Path(window.result.parquet_path).is_file())
                         self.assertIn("<html", Path(window.result.html_path).read_text(encoding="utf-8").lower())
 
-                        with patch.object(quote_runner.Storage, "put_file", side_effect=PermissionError("publication failed")):
+                        with patch.object(quote_runner.Storage, "put_file", side_effect=PermissionError("publication failed")):  # noqa: SIM117
                             with self.assertRaisesRegex(PermissionError, "publication failed"):
                                 quote_runner.save_report(window.result, write_xlsx=False, write_parquet=False, write_html=True)
-                        with patch("reporting.write_pricing_report"):
+                        with patch("reporting.write_pricing_report"):  # noqa: SIM117
                             with self.assertRaisesRegex(RuntimeError, "did not produce"):
                                 quote_runner.save_report(window.result, write_xlsx=False, write_parquet=False, write_html=True)
                         staging_before = set(settings.staging_dir.iterdir())
                         def fail_after_partial_write(*args, **kwargs):
                             kwargs["workbook_path"].write_bytes(b"partial report")
                             raise RuntimeError("report generation failed")
-                        with patch("reporting.write_pricing_report", side_effect=fail_after_partial_write):
+                        with patch("reporting.write_pricing_report", side_effect=fail_after_partial_write):  # noqa: SIM117
                             with self.assertRaisesRegex(RuntimeError, "report generation failed"):
                                 quote_runner.save_report(window.result)
                         self.assertEqual(set(settings.staging_dir.iterdir()), staging_before)
@@ -117,7 +116,9 @@ class GuiIntegrationTests(unittest.TestCase):
                         status_index = window.batch_model._cols.index("status")
                         self.assertTrue(all(row[status_index] == "OK" for row in window.batch_model._rows), window.batch_model._rows)
                         self.assertEqual(len(window._batch_cache), len(paths))
-                        from gap_pricing_gui.batch_detail_dialog import BatchDetailDialog
+                        from gap_pricing_gui.batch_detail_dialog import (
+                            BatchDetailDialog,
+                        )
                         source, (ctr, assump, results) = next(iter(window._batch_cache.items()))
                         detail = BatchDetailDialog(ctr, assump, results, source, out_dir=window.boutput.text(), parent=window)
                         detail._show_tab(1)

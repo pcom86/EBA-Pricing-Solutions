@@ -41,9 +41,9 @@ class GuiFileAccessTests(unittest.TestCase):
 	def test_s3_is_rejected_at_each_gui_boundary(self):
 		for operation in (file_access.input_file, file_access.input_directory,
 						  file_access.batch_ctr_files, file_access.output_directory):
-			with self.subTest(operation=operation.__name__):
-				with self.assertRaisesRegex(ConfigurationError, "mounted filesystem"):
-					operation("s3://bucket/ctrs")
+			with self.subTest(operation=operation.__name__), \
+					self.assertRaisesRegex(ConfigurationError, "mounted filesystem"):
+				operation("s3://bucket/ctrs")
 
 	def test_blank_and_unsupported_locations_are_rejected(self):
 		for location in ("", "   ", "https://example.invalid/input"):
@@ -74,9 +74,9 @@ class GuiFileAccessTests(unittest.TestCase):
 		target.write_bytes(b"existing")
 		with self.assertRaisesRegex(ConfigurationError, "writable directory"):
 			file_access.output_directory(target)
-		with patch.object(file_access.tempfile, "TemporaryFile", side_effect=PermissionError("read only")):
-			with self.assertRaisesRegex(ConfigurationError, "writable directory"):
-				file_access.output_directory()
+		with patch.object(file_access.tempfile, "TemporaryFile", side_effect=PermissionError("read only")), \
+				self.assertRaisesRegex(ConfigurationError, "writable directory"):
+			file_access.output_directory()
 
 
 if __name__ == "__main__":

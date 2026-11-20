@@ -23,7 +23,6 @@ from types import SimpleNamespace
 
 import polars as pl
 import pytest
-
 from ctr_loader.assumption_loader import get_assumptions
 from ctr_loader.basis_loader import get_basis
 from ctr_loader.ctr_loader_v2 import load_ctr
@@ -620,7 +619,7 @@ def _first_ctr_with(product_key):
     for path in sorted(CTR_TEST_DIR.rglob("*.ctr")):
         try:
             ctr = load_ctr(path)
-        except Exception:
+        except Exception:  # noqa: BLE001, S112 - skip unparsable CTR fixtures
             continue
         if product_key in ctr.active_products:
             return ctr

@@ -54,7 +54,7 @@ def _meta_for(srcs: dict[str, Path]) -> dict:
         st = p.stat()
         try:
             rel = str(p.resolve().relative_to(_ROOT.resolve()))
-        except Exception:
+        except (OSError, ValueError):
             rel = str(p)
         files[n] = [rel, st.st_size, st.st_mtime_ns]
     return {"files": files}
@@ -64,7 +64,7 @@ def _embedded_meta(zpath: Path) -> dict | None:
     try:
         with zipfile.ZipFile(zpath, "r") as z:
             return json.loads(z.read(META_NAME).decode("utf-8"))
-    except Exception:
+    except (OSError, ValueError, KeyError, zipfile.BadZipFile):
         return None
 
 
@@ -74,7 +74,7 @@ def is_fresh(zpath: Path) -> bool:
     emb = _embedded_meta(zpath)
     if not emb or "files" not in emb:
         return False
-    for n, (rel, sz, mt) in emb["files"].items():
+    for (rel, sz, mt) in emb["files"].values():
         p = (_ROOT / rel)
         if not p.exists():
             return False
@@ -128,7 +128,7 @@ def warm_async(modules=("reporting",), verbose: bool = True, delay_s: float = 0.
                 if verbose:
                     logger.info(f"[engine_bundle] warmed {m} in "
                           f"{time.perf_counter()-t0:.3f}s (background)")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - warm-up is best-effort and must not fail
                 if verbose:
                     logger.info(f"[engine_bundle] warm {m} skipped: "
                           f"{type(e).__name__}: {e}")
@@ -171,7 +171,7 @@ def _selftest(keep: bool) -> int:
         try:
             z.unlink()
             logger.info(f"  cleaned up {z.name} (self-test only; use --keep to retain)")
-        except Exception as e:
+        except OSError as e:
             logger.info(f"  [warn] could not delete {z.name}: {e}")
 
     logger.info("-" * 64)

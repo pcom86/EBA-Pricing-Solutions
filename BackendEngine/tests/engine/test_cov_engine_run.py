@@ -10,8 +10,8 @@ The report writer is stubbed so no xlsx/html generation cost is paid.
 from __future__ import annotations
 
 import os
-import sys
 import runpy
+import sys
 import threading
 from collections.abc import Mapping
 from datetime import date
@@ -19,22 +19,21 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import polars as pl
-import pytest
-
 import pricing_engine.concurrent_runner as cr
+import pytest
 from pricing_engine import aggregation, async_state, cli
 from pricing_engine.engine import (
     PricingContext,
-    apply_cease_override,
-    build_context,
-    price,
-    price_all_products,
     _apply_addons,
     _coerce_limit,
     _load_and_index_members,
     _require_columns,
     _resolve_member_role,
     _resolve_rate_factors,
+    apply_cease_override,
+    build_context,
+    price,
+    price_all_products,
 )
 
 ENGINE_ROOT = Path(__file__).resolve().parents[3] / "BackendEngine"
@@ -337,7 +336,7 @@ class TestApplyAddons:
 
 class TestRealPricing:
     def test_price_all_products_structure(self, priced, ctr_bundle):
-        results, ctx, calls = priced
+        results, _ctx, calls = priced
         assert set(results.keys()) == set(ctr_bundle.active_products)
         assert len(results) >= 1
         # on_product_priced fired once per product
@@ -359,7 +358,7 @@ class TestRealPricing:
                         active["total_cover"].sum() or 0.0) >= 0.0
 
     def test_gla_output_contract(self, priced):
-        results, ctx, calls = priced
+        results, _ctx, _calls = priced
         if "gla" not in results:
             pytest.skip("CTR has no gla product")
         df = results["gla"]
@@ -373,7 +372,7 @@ class TestRealPricing:
             (active["total_annual_premium"].fill_null(0.0) >= 0).all())
 
     def test_ctx_prior_results_populated(self, priced, ctr_bundle):
-        results, ctx, calls = priced
+        results, ctx, _calls = priced
         for pk in results:
             if pk != "ext_fc":
                 assert pk in ctx.prior_results
@@ -861,17 +860,17 @@ class TestWriteReportWorkerDbPaths:
     """Direct tests of _write_report_worker DB-related branches."""
 
     def _job(self, tmp_path, **kw):
-        defaults = dict(
-            ctr_path=Path("test.ctr"), scheme_name="TestScheme",
-            all_results={}, ctr=SimpleNamespace(), assump=None,
-            basis_snapshot="b", assump_snapshot="a",
-            out_path=tmp_path / "out.xlsx",
-            final_parquet=tmp_path / "out_calc.parquet",
-            final_html=tmp_path / "out.html",
-            write_xlsx=True, write_html=False,
-            output_root=str(tmp_path), wait_for_reports=True,
-            basis_folder="bf", assump_folder="af",
-        )
+        defaults = {
+            "ctr_path": Path("test.ctr"), "scheme_name": "TestScheme",
+            "all_results": {}, "ctr": SimpleNamespace(), "assump": None,
+            "basis_snapshot": "b", "assump_snapshot": "a",
+            "out_path": tmp_path / "out.xlsx",
+            "final_parquet": tmp_path / "out_calc.parquet",
+            "final_html": tmp_path / "out.html",
+            "write_xlsx": True, "write_html": False,
+            "output_root": str(tmp_path), "wait_for_reports": True,
+            "basis_folder": "bf", "assump_folder": "af",
+        }
         defaults.update(kw)
         return cr.ReportWriteJob(**defaults)
 

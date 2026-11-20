@@ -63,7 +63,7 @@ def _format_value(value, number_format: str) -> str:
     return str(value)
 
 
-def sheet_to_grid(ws, title: str = None) -> GridSheet:
+def sheet_to_grid(ws, title: str | None = None) -> GridSheet:
     max_row = ws.max_row
     max_col = ws.max_column
     rows = []

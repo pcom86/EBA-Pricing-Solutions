@@ -1,14 +1,7 @@
 from __future__ import annotations
 
-import calendar
-import math
-import re
-from datetime import date
-from typing import Any
-
 import polars as pl
 
-from . import helpers_common
 from .helpers_common import (
     _gip_asof,
     _gip_key_part,
@@ -612,7 +605,7 @@ def _tip_build_lookup_tables(basis_tables, assump_tables, ctx):
 def _tip_compute_member_rows(df, LT):
     g = LT["g"]
     size_t = LT["size_t"]
-    comm = LT["comm"]
+    LT["comm"]
     pear = LT["pear"]
     mort_map = LT["mort_map"]
     sb_by_g = LT["sb_by_g"]
@@ -673,7 +666,7 @@ def _tip_compute_member_rows(df, LT):
         K = row.get("gender")
         I = _gipf(row.get("annual_salary"))
         J = _gipf(row.get("monthly_salary")) or (I / 12.0)
-        M = int(round(_gipf(row.get("nra_final") if row.get("nra_final") is not None else row.get("nra"))))
+        M = round(_gipf(row.get("nra_final") if row.get("nra_final") is not None else row.get("nra")))
         L = _gipf(row.get("waiver"))
 
         cp = g.tip_core_benefit_perc.get(cat, [0, 0, 0, 0])

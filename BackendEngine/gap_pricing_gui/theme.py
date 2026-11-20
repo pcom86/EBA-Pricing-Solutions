@@ -212,7 +212,7 @@ def apply_light_theme(app) -> None:
     ink = QtGui.QColor(OM["ink"])
     white = QtGui.QColor(OM["white"])
     panel = QtGui.QColor(OM["panel"])
-    border = QtGui.QColor(OM["border"])
+    QtGui.QColor(OM["border"])
     green = QtGui.QColor(OM["green"])
 
     palette.setColor(QtGui.QPalette.Window, panel)

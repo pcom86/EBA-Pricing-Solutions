@@ -856,7 +856,7 @@ def apply_income_taper(df: pl.DataFrame) -> pl.DataFrame:
     mask = pl.col("reduction_period").cast(pl.Utf8) == "Income Tapering"
     if df.filter(mask).height == 0:
         return df
-    redmap = pl.col("nra_final")
+    pl.col("nra_final")
     months_floor = ((pl.col("nra_final") - pl.col("age")) * 12).floor()
     rp = (pl.col("reduction_period_months").cast(pl.Float64, strict=False)
           if "reduction_period_months" in df.columns else pl.lit(6.0))

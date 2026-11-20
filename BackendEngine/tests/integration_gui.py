@@ -46,7 +46,7 @@ class GuiIntegrationTests(unittest.TestCase):
 
 		app = QtWidgets.QApplication.instance() or QtWidgets.QApplication([])
 		errors = []
-		with tempfile.TemporaryDirectory(prefix="gui-test-", dir=settings.output_dir) as output:
+		with tempfile.TemporaryDirectory(prefix="gui-test-", dir=settings.output_dir) as output:  # noqa: SIM117
 			with patch.dict(os.environ, {"GAP_OUTPUT_DIR": output}):
 				get_settings.cache_clear()
 				with patch.object(QtWidgets.QMessageBox, "critical", side_effect=lambda *args: errors.append(args[1:])), \
@@ -97,17 +97,17 @@ class GuiIntegrationTests(unittest.TestCase):
 						self.assertTrue(Path(window.result.parquet_path).is_file())
 						self.assertIn("<html", Path(window.result.html_path).read_text(encoding="utf-8").lower())
 
-						with patch.object(quote_runner.Storage, "put_file", side_effect=PermissionError("publication failed")):
+						with patch.object(quote_runner.Storage, "put_file", side_effect=PermissionError("publication failed")):  # noqa: SIM117
 							with self.assertRaisesRegex(PermissionError, "publication failed"):
 								quote_runner.save_report(window.result, write_xlsx=False, write_parquet=False, write_html=True)
-						with patch("reporting.write_pricing_report"):
+						with patch("reporting.write_pricing_report"):  # noqa: SIM117
 							with self.assertRaisesRegex(RuntimeError, "did not produce"):
 								quote_runner.save_report(window.result, write_xlsx=False, write_parquet=False, write_html=True)
 						staging_before = set(settings.staging_dir.iterdir())
 						def fail_after_partial_write(*args, **kwargs):
 							kwargs["workbook_path"].write_bytes(b"partial report")
 							raise RuntimeError("report generation failed")
-						with patch("reporting.write_pricing_report", side_effect=fail_after_partial_write):
+						with patch("reporting.write_pricing_report", side_effect=fail_after_partial_write):  # noqa: SIM117
 							with self.assertRaisesRegex(RuntimeError, "report generation failed"):
 								quote_runner.save_report(window.result)
 						self.assertEqual(set(settings.staging_dir.iterdir()), staging_before)

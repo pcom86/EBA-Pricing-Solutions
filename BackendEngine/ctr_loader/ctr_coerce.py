@@ -66,7 +66,7 @@ def excel_to_date(v, datemode):
         try:
             y, m, d, *_ = xlrd.xldate_as_tuple(v, datemode)
             return date(y, m, d)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - coercion fallback; any parse failure yields None
             logger.warning(f"[ctr_coerce] excel_to_date failed for serial {v!r} (datemode={datemode}): {e}")
             return None
     s = str(v).strip()

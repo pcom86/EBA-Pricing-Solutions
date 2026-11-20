@@ -538,7 +538,7 @@ def _apply_widths(ws, n_products: int, min_width: float = 10.0, max_width: float
         ws.column_dimensions[col_letter].width = width
 
 
-def _get_product_display_name(pkey: str, ratings: dict = None, edu_display_name: str = None) -> str:
+def _get_product_display_name(pkey: str, ratings: dict | None = None, edu_display_name: str | None = None) -> str:
     if pkey == "lsdb":
         lsdb_val = str((ratings or {}).get("lsdb", "")).strip().lower()
         if lsdb_val in ("accelerator", "accelerated"):

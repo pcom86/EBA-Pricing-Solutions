@@ -11,7 +11,6 @@ from datetime import date
 
 import polars as pl
 import pytest
-
 from ctr_loader import ctr_loader_v2 as cl
 from ctr_loader.ctr_schemas import SchemeRecord
 from ctr_loader.products_registry import PRODUCT_REGISTRY
@@ -382,7 +381,7 @@ def test_parse_catinput_no_labels_yields_empty_frame():
     scheme = _scheme_with_rating({"gla": "Yes"})
     # block label cells removed -> fields_in_block empty -> empty long frame
     cells = {(0, 7): 1, (2, 1): "GLA", (3, 0): 1, (3, 1): "Yes"}
-    df, active, warns = cl._parse_catinput(_ws(cells), scheme, ("gla",))
+    df, active, _warns = cl._parse_catinput(_ws(cells), scheme, ("gla",))
     assert df.height == 0
     assert "variant" in df.columns
     assert active == {"gla": (1,)}
@@ -394,14 +393,14 @@ def test_parse_catinput_missing_block_warns(monkeypatch):
         cl.PRODUCT_REGISTRY, "gla", replace(spec, catinput_blocks={})
     )
     scheme = _scheme_with_rating({"gla": "Yes"})
-    df, active, warns = cl._parse_catinput(_catinput_ws(), scheme, ("gla",))
+    df, _active, warns = cl._parse_catinput(_catinput_ws(), scheme, ("gla",))
     assert "[gla] no block for variant 'default'" in warns
     assert df.height == 0
 
 
 def test_parse_catinput_inactive_product_skipped():
     scheme = _scheme_with_rating({"gla": "No"})
-    df, active, warns = cl._parse_catinput(_catinput_ws(), scheme, ("gla",))
+    df, active, _warns = cl._parse_catinput(_catinput_ws(), scheme, ("gla",))
     # variant None -> skipped entirely (toggle still counted in active map)
     assert df.height == 0
     assert active == {"gla": (1,)}

@@ -14,8 +14,8 @@ def read_xlsx_values(path):
 
 
 def compare_to_baseline_v2(new_xlsx_path, new_parquet_path, baseline_dir, rel_tol=1e-9):
-    baseline_xlsx = list(baseline_dir.glob("*.xlsx"))[0]
-    baseline_parquet = list(baseline_dir.glob("*_calc.parquet"))[0]
+    baseline_xlsx = next(iter(baseline_dir.glob("*.xlsx")))
+    baseline_parquet = next(iter(baseline_dir.glob("*_calc.parquet")))
     b_vals = read_xlsx_values(baseline_xlsx)
     n_vals = read_xlsx_values(new_xlsx_path)
     all_keys = set(b_vals) | set(n_vals)
@@ -26,9 +26,9 @@ def compare_to_baseline_v2(new_xlsx_path, new_parquet_path, baseline_dir, rel_to
         b, n = b_vals.get(k), n_vals.get(k)
         if b == n:
             continue
-        if isinstance(b, (int, float)) and isinstance(n, (int, float)) and b != 0:
-            if abs(n - b) / abs(b) <= rel_tol:
-                continue
+        if (isinstance(b, (int, float)) and isinstance(n, (int, float))
+                and b != 0 and abs(n - b) / abs(b) <= rel_tol):
+            continue
         xlsx_diffs.append((k, b, n))
 
     b_df = pl.read_parquet(baseline_parquet)

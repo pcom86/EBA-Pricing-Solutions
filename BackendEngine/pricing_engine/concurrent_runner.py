@@ -34,7 +34,7 @@ def _is_db_reachable() -> bool:
         conn = pyodbc.connect(get_settings().db_connection_string, timeout=2)
         conn.close()
         _db_reachable = True
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - any driver/connection error means unreachable
         logger.warning(f"[db_loader] Local database not reachable on this machine "
               f"({type(e).__name__}) -- DB load will be skipped for this "
               f"session. Quote pricing and reports are unaffected.")
@@ -112,9 +112,8 @@ def run_single_quote(ctr_path: str | Path,
                      basis_folder: str | None = None,
                      assump_folder: str | None = None) -> QuoteResult:
     from ctr_loader.ctr_loader_v2 import load_ctr
-    from reporting import write_pricing_report
 
-    from .engine import build_context, price, price_all_products
+    from .engine import build_context, price_all_products
 
     output_root = str(out_dir)
     out_dir = Path(".") if is_s3(output_root) else Path(output_root)
@@ -193,7 +192,7 @@ def run_single_quote(ctr_path: str | Path,
         if result_sink is not None:
             try:
                 result_sink(str(ctr_path), ctr, assump, all_results)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - result_sink is best-effort; never fail the quote
                 logger.warning(f"[result_sink] callback failed for {ctr_path}: {e}")
 
         return QuoteResult(
@@ -209,7 +208,7 @@ def run_single_quote(ctr_path: str | Path,
             html_path    = html_path,
         )
 
-    except Exception:
+    except Exception:  # noqa: BLE001 - per-quote isolation: any failure becomes an error QuoteResult
         return QuoteResult(
             ctr_name     = ctr_path.name,
             ctr_path     = source_location,
@@ -413,7 +412,7 @@ def run_quotes_concurrent(ctr_paths: list[str | Path],
     try:
         from .db_loader import sql_seq_guid
         _batch_case_id = sql_seq_guid()
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - DB sequence is optional; fall back to uuid4
         if verbose:
             logger.warning(f"[db_loader] batch: sql_seq_guid unavailable ({type(e).__name__}: {e}) "
                   f"-- falling back to plain uuid4 for case_id (pricing unaffected)")

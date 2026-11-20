@@ -17,7 +17,6 @@ from .snapshot_bundle_utils import (
     _bundle_is_fresh,
     _read_from_bundle,
     _read_threaded,
-    rezip_snapshot,
 )
 
 logger = logging.getLogger(__name__)

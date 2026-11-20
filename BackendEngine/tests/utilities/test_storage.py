@@ -3,12 +3,19 @@ from __future__ import annotations
 import tempfile
 import types
 import unittest
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import Mock, patch
 
 from gap_config import ConfigurationError
-from gap_config.storage import Storage, join_location, local_directory, local_file, select_snapshot
+from gap_config.storage import (
+    Storage,
+    join_location,
+    local_directory,
+    local_file,
+    select_snapshot,
+)
+
 from tests.utilities.fake_s3 import FakeS3, S3Error
 
 
@@ -110,8 +117,8 @@ class StorageTests(unittest.TestCase):
             Storage("s3://bucket").exists("missing")
 
     def test_pinned_and_latest_s3_snapshots(self):
-        self.client.seed("bucket", "basis/v1/table.parquet", modified=datetime(2025, 1, 1, tzinfo=timezone.utc))
-        self.client.seed("bucket", "basis/v2/table.parquet", b"latest", datetime(2026, 1, 1, tzinfo=timezone.utc))
+        self.client.seed("bucket", "basis/v1/table.parquet", modified=datetime(2025, 1, 1, tzinfo=UTC))
+        self.client.seed("bucket", "basis/v2/table.parquet", b"latest", datetime(2026, 1, 1, tzinfo=UTC))
         self.client.seed("bucket", "basis/not-a-snapshot/note.txt")
         self.assertEqual(select_snapshot("s3://bucket/basis", "v1", self.client).name, "v1")
         latest = select_snapshot("s3://bucket/basis", None, self.client)

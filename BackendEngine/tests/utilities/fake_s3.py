@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 
@@ -20,7 +20,7 @@ class FakeS3:
 
     def seed(self, bucket, key, data=b"data", modified=None):
         self.data[bucket, key] = data
-        self.modified[bucket, key] = modified or datetime(2026, 1, 1, tzinfo=timezone.utc)
+        self.modified[bucket, key] = modified or datetime(2026, 1, 1, tzinfo=UTC)
 
     def upload_file(self, filename, bucket, key):
         if self.upload_error:

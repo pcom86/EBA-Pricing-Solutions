@@ -75,7 +75,7 @@ def _delete_dir(path: str) -> None:
     import shutil
     try:
         shutil.rmtree(path, ignore_errors=True)
-    except Exception as e:
+    except OSError as e:
         logger.warning(f"[cache_cleanup] could not remove {path}: {e}")
 
 

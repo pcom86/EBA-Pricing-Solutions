@@ -1,15 +1,11 @@
 from __future__ import annotations
 
-from pathlib import Path
-
-import openpyxl
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.styles.cell_style import StyleArray
 
 from .constants import (
     CB_ADDONS,
     CB_LABEL_SUFFIX,
-    CB_PRODUCTS,
     CB_RENDER_ORDER,
     CB_SECTION_TITLE,
     N_CATEGORIES,
@@ -228,8 +224,8 @@ def _write_ratio_table(ws, row: int, scheme: dict, cats: dict, addons,
                        denom_scheme: float,
                        denom_by_cat: dict,
                        freq_divisor: float,
-                       gla_denom_scheme: float = None,
-                       gla_denom_by_cat: dict = None,
+                       gla_denom_scheme: float | None = None,
+                       gla_denom_by_cat: dict | None = None,
                        express: bool = False) -> int:
     _GLA_COMPONENTS = {"commission", "vat"}
     _use_gla = (denominator == "cover" and express

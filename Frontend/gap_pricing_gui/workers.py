@@ -15,7 +15,7 @@ class StartupThread(QtCore.QThread):
             basis_folder, assump_folder = snapshot_folders()
             basis, assump = load_shared_snapshots(basis_folder, assump_folder)
             self.done.emit(basis, assump)
-        except Exception:
+        except Exception:  # noqa: BLE001 - thread must report any failure to the GUI
             import traceback
             self.failed.emit(traceback.format_exc())
 
@@ -50,7 +50,7 @@ class BatchThread(QtCore.QThread):
                 wait_for_reports=True,
             )
             self.done.emit(df)
-        except Exception:
+        except Exception:  # noqa: BLE001 - thread must report any failure to the GUI
             import traceback
             self.failed.emit(traceback.format_exc())
 
@@ -91,6 +91,6 @@ class ViewPrewarmThread(QtCore.QThread):
             )
 
             self.done.emit(cb_grid, po_grid, po_data["products"])
-        except Exception:
+        except Exception:  # noqa: BLE001 - thread must report any failure to the GUI
             import traceback
             self.failed.emit(traceback.format_exc())

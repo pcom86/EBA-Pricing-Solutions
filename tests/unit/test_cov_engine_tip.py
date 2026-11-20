@@ -619,7 +619,7 @@ def _first_ctr_with(product_key):
     for path in sorted(CTR_TEST_DIR.rglob("*.ctr")):
         try:
             ctr = load_ctr(path)
-        except Exception:
+        except Exception:  # noqa: BLE001, S112 - skip unparsable CTR fixtures
             continue
         if product_key in ctr.active_products:
             return ctr

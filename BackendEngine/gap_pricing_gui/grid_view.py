@@ -13,7 +13,7 @@ def _qcolor_from_hex(hex_str: str | None):
         return None
     try:
         return QtGui.QColor(hex_str)
-    except Exception:
+    except (TypeError, ValueError):
         return None
 
 

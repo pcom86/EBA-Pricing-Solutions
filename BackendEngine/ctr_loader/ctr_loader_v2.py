@@ -4,7 +4,7 @@ import hashlib
 import logging
 import time
 from dataclasses import dataclass, replace
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 import polars as pl
@@ -1071,7 +1071,7 @@ def load_ctr(ctr_path: str | Path,
     warnings: list[str] = []
 
     fp = _fingerprint(str(ctr_path))
-    loaded_at = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    loaded_at = datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
 
     t0 = time.perf_counter()
     wb = _open_workbook(ctr_path)

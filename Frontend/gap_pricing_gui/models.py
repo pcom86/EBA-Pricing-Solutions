@@ -48,11 +48,11 @@ class FastModel(QtCore.QAbstractTableModel):
         self._num = [dt in _NUMERIC for dt in df.dtypes]
         self.endResetModel()
 
-    def rowCount(self, p=QtCore.QModelIndex()):
-        return 0 if p.isValid() else len(self._rows)
+    def rowCount(self, p=None):
+        return 0 if p is not None and p.isValid() else len(self._rows)
 
-    def columnCount(self, p=QtCore.QModelIndex()):
-        return 0 if p.isValid() else len(self._cols)
+    def columnCount(self, p=None):
+        return 0 if p is not None and p.isValid() else len(self._cols)
 
     def data(self, ix, role=QtCore.Qt.DisplayRole):
         if not ix.isValid():
