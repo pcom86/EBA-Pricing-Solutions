@@ -1,1 +1,3 @@
-"# EBA-Pricing-Solutions" 
+# EBA-Pricing-Solutions
+
+See the [project documentation](Documentation/README.md).
