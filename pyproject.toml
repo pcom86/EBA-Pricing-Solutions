@@ -5,3 +5,19 @@ extend-exclude = ["*.ipynb"]
 [tool.ruff.lint]
 # Several modules re-export or import names for side effects; auto-removing them breaks the app.
 unfixable = ["F401"]
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "BackendEngine"
+explicit_package_bases = true
+ignore_missing_imports = true
+follow_imports = "silent"
+warn_unused_ignores = true
+warn_redundant_casts = true
+strict_equality = true
+exclude = "(^|/)tests/"
+
+# PySide6 stubs expose Qt enums only on instances; class-level access is idiomatic Qt.
+[[tool.mypy.overrides]]
+module = ["gap_pricing_gui.main_window", "gap_pricing_gui.launch_gap_gui"]
+disable_error_code = ["attr-defined"]
