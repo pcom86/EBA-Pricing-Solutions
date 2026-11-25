@@ -43,6 +43,20 @@ finally {
 }
 
 if (-not $SkipTests) {
+    Write-Host "> vulture BackendEngine (dead code)" -ForegroundColor Cyan
+    # ignore-names covers intentional cases: signal-handler params, reserved API
+    # params, and deliberate warm-up imports of the reporting package.
+    & $python -m vulture `
+        BackendEngine/ctr_loader BackendEngine/pricing_engine BackendEngine/reporting `
+        BackendEngine/gap_config BackendEngine/gap_pricing_gui --min-confidence 80 `
+        --ignore-names "signum,frame,scheme_params_override,overwrite,reporting"
+    if ($LASTEXITCODE -ne 0) { $failed += "vulture" }
+
+    Write-Host "> bandit BackendEngine (security)" -ForegroundColor Cyan
+    # -ll reports medium+ severity only; -s B101 skips assert-used (intentional style here)
+    & $python -m bandit -r BackendEngine -x BackendEngine/tests -s B101 -ll -q
+    if ($LASTEXITCODE -ne 0) { $failed += "bandit" }
+
     Write-Host "> pytest tests/unit BackendEngine/tests" -ForegroundColor Cyan
     & $python -m pytest tests/unit BackendEngine/tests -q
     if ($LASTEXITCODE -ne 0) { $failed += "pytest" }

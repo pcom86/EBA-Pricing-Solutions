@@ -436,7 +436,7 @@ def _load_scheme_product_config(cur, scheme_id: str, ctr) -> int:
     from ctr_loader.products_registry import IN_SCOPE_PRODUCTS
 
     cur.execute(
-        f"SELECT product, {', '.join(SPC_FIELDS)} FROM scheme_product_config WHERE scheme_id = ?",
+        f"SELECT product, {', '.join(SPC_FIELDS)} FROM scheme_product_config WHERE scheme_id = ?",  # nosec B608 - column names are module constants
         scheme_id,
     )
     existing = {}
@@ -492,7 +492,7 @@ def _load_scheme_product_config(cur, scheme_id: str, ctr) -> int:
         cur.fast_executemany = False
         try:
             cur.executemany(
-                f"INSERT INTO scheme_product_config ({cols}) VALUES ({placeholders})",
+                f"INSERT INTO scheme_product_config ({cols}) VALUES ({placeholders})",  # nosec B608 - identifiers are module constants, values are bound params
                 to_insert,
             )
         finally:
@@ -503,7 +503,7 @@ def _load_scheme_product_config(cur, scheme_id: str, ctr) -> int:
         cur.fast_executemany = False
         try:
             cur.executemany(
-                f"UPDATE scheme_product_config SET {set_clause} WHERE scheme_id = ? AND product = ?",
+                f"UPDATE scheme_product_config SET {set_clause} WHERE scheme_id = ? AND product = ?",  # nosec B608 - identifiers are module constants, values are bound params
                 to_update,
             )
         finally:
@@ -551,7 +551,7 @@ def _resolve_member(name, dob, gender, salary, candidates_by_dob, claimed_ids: s
 
 def _insert_pricing_results(cur, run_id, df_result, member_id_map):
     insert_sql = (
-        f"INSERT INTO pricing_result (run_id, member_id, product, {','.join(FACT_COLUMNS)}) "
+        f"INSERT INTO pricing_result (run_id, member_id, product, {','.join(FACT_COLUMNS)}) "  # nosec B608 - column names are module constants
         f"VALUES ({','.join(['?'] * (3 + len(FACT_COLUMNS)))})"
     )
 

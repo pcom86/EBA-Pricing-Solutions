@@ -1,0 +1,10 @@
+# Dev/test tooling — install with: pip install -r requirements-dev.txt
+# Pinned so ruff/mypy/pytest behave identically on every machine
+# (unpinned ruff versions disagree on isort import classification -> I001 noise).
+ruff==0.17.5
+mypy==2.4.1
+pytest==9.2.0
+pytest-cov==7.1.0
+coverage==7.17.3
+vulture==2.16
+bandit==1.9.4
