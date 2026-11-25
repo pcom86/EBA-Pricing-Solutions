@@ -4,6 +4,7 @@ import os
 import shutil
 import tempfile
 from pathlib import Path, PurePosixPath
+from typing import Any
 from urllib.parse import urlsplit
 
 from .settings import ConfigurationError, get_settings, validate_location
@@ -174,7 +175,7 @@ def select_snapshot(root: str, name: str | None, client=None) -> Path:
             raise ValueError("Snapshot name must be a single directory name")
         folder = local_directory(join_location(root, name), client)
     elif store.remote:
-        modified = {}
+        modified: dict[str, Any] = {}
         for obj in store.objects():
             parts = PurePosixPath(obj["Key"]).parts
             if len(parts) == 2 and parts[-1].endswith(".parquet"):
@@ -183,7 +184,7 @@ def select_snapshot(root: str, name: str | None, client=None) -> Path:
                 modified[version] = max(modified.get(version, timestamp), timestamp)
         if not modified:
             raise FileNotFoundError(f"No non-empty snapshot under {root}")
-        folder = local_directory(join_location(root, max(modified, key=modified.get)), client)
+        folder = local_directory(join_location(root, max(modified, key=lambda k: modified[k])), client)
     else:
         base = Path(root)
         candidates = [p for p in base.iterdir() if p.is_dir() and any(p.glob("*.parquet"))]

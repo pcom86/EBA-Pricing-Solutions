@@ -328,7 +328,7 @@ def _apply_gip_composite(df: pl.DataFrame, spec: dict, basis_tables: dict,
     )
     result = result.with_columns((pl.col("__DC") * pl.col("__BA") * pl.col("__FS")).alias("__DF"))
 
-    esc_row_zero = esc_map.get(0.0)
+    esc_row_zero = esc_map.get(0.0) or {}
     BS0 = "0"
     lower_key_0 = esc_row_zero["map_lower_key"]
     upper_key_0 = esc_row_zero["map_upper_key"]

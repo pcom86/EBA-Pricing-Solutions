@@ -373,16 +373,18 @@ def _load_category_config(cur, scheme_id: str, ctr) -> int:
         core = {k: field_map.get(k) for k in CORE_CATEGORY_FIELDS}
         tail = {k: v for k, v in field_map.items() if k not in CORE_CATEGORY_FIELDS}
 
+        cat_flag_raw = core.get("category_flag")
         cat_flag = None
-        if core.get("category_flag") is not None:
+        if cat_flag_raw is not None:
             try:
-                cat_flag = float(core["category_flag"])
+                cat_flag = float(cat_flag_raw)
             except (TypeError, ValueError):
                 cat_flag = None
+        bmult_raw = core.get("benefit_multiple")
         bmult = None
-        if core.get("benefit_multiple") is not None:
+        if bmult_raw is not None:
             try:
-                bmult = float(core["benefit_multiple"])
+                bmult = float(bmult_raw)
             except (TypeError, ValueError):
                 bmult = None
 
@@ -474,12 +476,12 @@ def _load_scheme_product_config(cur, scheme_id: str, ctr) -> int:
             old = existing[product]
             new_vals = []
             changed = False
-            for f in SPC_FIELDS:
-                if old.get(f) is None and field_map.get(f) is not None:
-                    new_vals.append(field_map[f])
+            for field_name in SPC_FIELDS:
+                if old.get(field_name) is None and field_map.get(field_name) is not None:
+                    new_vals.append(field_map[field_name])
                     changed = True
                 else:
-                    new_vals.append(old.get(f))
+                    new_vals.append(old.get(field_name))
             if changed:
                 to_update.append((*new_vals, scheme_id, product))
 
@@ -536,12 +538,12 @@ def _resolve_member(name, dob, gender, salary, candidates_by_dob, claimed_ids: s
         if score > best_score:
             best_score, best = score, cand
 
-    if best_score >= MATCH_AUTO_LINK_THRESHOLD:
+    if best is not None and best_score >= MATCH_AUTO_LINK_THRESHOLD:
         claimed_ids.add(best["member_id"])
         return best["member_id"], "fuzzy_auto", best_score, False, None
 
     queue_entry = None
-    if MATCH_QUEUE_THRESHOLD <= best_score < MATCH_AUTO_LINK_THRESHOLD:
+    if best is not None and MATCH_QUEUE_THRESHOLD <= best_score < MATCH_AUTO_LINK_THRESHOLD:
         queue_entry = {"candidate_member_id": best["member_id"], "score": best_score}
 
     return None, "new", best_score, True, queue_entry

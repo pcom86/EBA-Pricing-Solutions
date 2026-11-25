@@ -427,7 +427,7 @@ def _fc_db_loading(df: pl.DataFrame, adj: dict,
             gate_on = gate_raw
         else:
             try:
-                gate_on = float(gate_raw) == 1.0
+                gate_on = gate_raw is not None and float(gate_raw) == 1.0
             except (TypeError, ValueError):
                 gate_on = False
 

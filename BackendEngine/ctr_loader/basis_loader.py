@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from functools import lru_cache
 from pathlib import Path
@@ -26,7 +27,7 @@ class BasisBundle:
     version: str
     built_at: str
     source_sha256: str
-    tables: dict[str, pl.DataFrame]
+    tables: Mapping[str, pl.DataFrame]
 
     def for_product(self, product_key: str) -> dict[str, pl.DataFrame]:
         spec = PRODUCT_REGISTRY[product_key]
@@ -155,5 +156,5 @@ def get_basis(folder, max_workers: int = 32, use_bundle: bool = True) -> BasisBu
     return _get_basis_cached(str(folder), int(max_workers), bool(use_bundle))
 
 
-get_basis.cache_clear = _get_basis_cached.cache_clear
-get_basis.cache_info = _get_basis_cached.cache_info
+get_basis.cache_clear = _get_basis_cached.cache_clear  # type: ignore[attr-defined]
+get_basis.cache_info = _get_basis_cached.cache_info  # type: ignore[attr-defined]

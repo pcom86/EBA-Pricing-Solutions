@@ -49,7 +49,8 @@ def main(argv: list[str] | None = None) -> int:
             raise ValueError("No CTR input files found")
         from .concurrent_runner import load_shared_snapshots, run_quotes_concurrent
         basis, assumptions = load_shared_snapshots(basis_dir, assumption_dir)
-        report_mode = {"xlsx": True, "html": "html", "parquet": False}[args.report]
+        _mode_map: dict[str, bool | str] = {"xlsx": True, "html": "html", "parquet": False}
+        report_mode = _mode_map[args.report]
         summary = run_quotes_concurrent(
             inputs, basis, assumptions, args.output_dir or settings.output_dir,
             basis_snapshot=basis_dir.name, assump_snapshot=assumption_dir.name,

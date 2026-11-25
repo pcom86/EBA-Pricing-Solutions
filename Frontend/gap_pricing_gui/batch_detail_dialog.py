@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import time
+from typing import TYPE_CHECKING
 
 import polars as pl
 from PySide6 import QtWidgets
+
+if TYPE_CHECKING:
+    from reporting.grid_extract import GridSheet
 
 from .grid_view import ProductPillGridView, populate_table_from_grid
 from .single_quote_view import populate_summary_table, product_display_name
@@ -57,8 +61,8 @@ class BatchDetailDialog(QtWidgets.QDialog):
         self.out_dir = out_dir
         self.active_products = list(all_results.keys())
 
-        self._cb_grid = None
-        self._po_grid = None
+        self._cb_grid: GridSheet | None = None
+        self._po_grid: GridSheet | None = None
 
         scheme = ctr.scheme
         self.setWindowTitle(f"{scheme.scheme_name} — Quote {scheme.quote_number}")

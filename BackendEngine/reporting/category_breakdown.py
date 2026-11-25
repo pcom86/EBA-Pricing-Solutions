@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.styles.cell_style import StyleArray
 
@@ -193,7 +195,7 @@ def _write_header_row(ws, row: int, title: str) -> int:
 
 
 def _write_full_table(ws, row: int, scheme: dict, cats: dict, addons) -> int:
-    rows = [
+    rows: list[tuple[str, Any, str]] = [
         ("Basic Premium",        lambda m: m.get("basic_premium", 0.0),       "money"),
         ("Total Salary pa R",    lambda m: m.get("total_salary_annual", 0.0), "money"),
         ("Member count",         lambda m: m.get("n_members", 0),             "int"),
@@ -270,7 +272,7 @@ def _write_ratio_table(ws, row: int, scheme: dict, cats: dict, addons,
                     + _cat_val(m, "vat", cat_no))
         return _cat_val(m, "total_premium", cat_no)
 
-    rows = [
+    rows: list[tuple[str, Any, Any, str]] = [
         ("Basic Premium", lambda m: _scheme_val(m, "basic_premium"),
          lambda m, i: _cat_val(m, "basic_premium", i), _kind),
         ("Additional Selections", None, None, "header"),

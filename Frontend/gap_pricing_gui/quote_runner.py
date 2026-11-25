@@ -70,8 +70,10 @@ class QuoteResult:
 
     total_runtime_s: float | None = None
 
-    xlsx_path:    Path | None = None
-    parquet_path: Path | None = None
+    xlsx_path:    str | Path | None = None
+    parquet_path: str | Path | None = None
+    html_path:    str | Path | None = None
+    _db_load_started: bool = False
 
     def summary_text(self) -> str:
         lines: list[str] = [
@@ -300,9 +302,9 @@ def save_report(
     fname_parts.append(ts)
 
     filename = "_".join(fname_parts)
-    xlsx_path = join_location(out_dir, filename + ".xlsx")
-    parquet_path = join_location(out_dir, filename + "_calc.parquet")
-    html_path = join_location(out_dir, filename + ".html")
+    xlsx_path: str | Path = join_location(out_dir, filename + ".xlsx")
+    parquet_path: str | Path = join_location(out_dir, filename + "_calc.parquet")
+    html_path: str | Path = join_location(out_dir, filename + ".html")
     if not is_s3(out_dir):
         xlsx_path, parquet_path, html_path = map(Path, (xlsx_path, parquet_path, html_path))
 

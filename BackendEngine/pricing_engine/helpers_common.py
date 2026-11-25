@@ -8,7 +8,7 @@ import polars as pl
 try:
     from ctr_loader.products_registry import resolve_ci_mortality_table
 except ImportError:
-    resolve_ci_mortality_table = None
+    resolve_ci_mortality_table = None  # type: ignore[assignment]
 
 __all__ = [
     "_apply_baseline_yr",

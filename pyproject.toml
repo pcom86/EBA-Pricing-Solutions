@@ -18,6 +18,17 @@ strict_equality = true
 exclude = "(^|/)tests/"
 
 # PySide6 stubs expose Qt enums only on instances; class-level access is idiomatic Qt.
+# quote_runner/models are excluded: their attr-defined findings are real.
 [[tool.mypy.overrides]]
-module = ["gap_pricing_gui.main_window", "gap_pricing_gui.launch_gap_gui"]
+module = [
+    "gap_pricing_gui.main_window",
+    "gap_pricing_gui.launch_gap_gui",
+    "gap_pricing_gui.theme",
+    "gap_pricing_gui.grid_view",
+    "gap_pricing_gui.single_quote_view",
+    "gap_pricing_gui.batch_detail_dialog",
+    "gap_pricing_gui.category_split_bar",
+    "gap_pricing_gui.workers",
+    "gap_pricing_gui.engine_bundle",
+]
 disable_error_code = ["attr-defined"]

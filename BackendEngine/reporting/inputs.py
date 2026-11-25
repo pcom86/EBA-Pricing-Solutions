@@ -179,10 +179,11 @@ def _vat_loaded_bucket_rate(net_base: float, scale, vat_pct: float) -> float:
     Sn = [(b * (1.0 - x) if b is not None else None) for b, x in zip(bd, L)]
     tot, cum = 0.0, 0.0
     for i in range(len(Qn)):
-        if Sn[i] is None:
+        sni = Sn[i]
+        if sni is None:
             band = max(0.0, net_base - cum)
         else:
-            band = max(0.0, min(net_base - cum, Sn[i])); cum += Sn[i]
+            band = max(0.0, min(net_base - cum, sni)); cum += sni
         tot += band * Qn[i]
     return (tot / (1.0 + vat_pct)) / net_base
 
@@ -1200,6 +1201,7 @@ def gather_po_data(
     active_edu_pkey = getattr(scheme, "education_product", None)
     edu_df = all_results.get(active_edu_pkey) if active_edu_pkey else None
     if edu_df is not None and edu_df.height:
+        assert active_edu_pkey is not None  # edu_df is only set when a pkey exists
         edu_active_raw = _active_slice(edu_df)
         edu_active = _tt_active_slice(edu_df)
         edu_over_nra = int(
@@ -2111,7 +2113,7 @@ def _reallocate_cb_basic_pooled(prod: dict, split_mode: str = "Sum Assured", raw
         elif is_flat_rand_per_mem:
             cat_key = [k for k, v in cats.items() if v is m]
             cat_members = (cat_member_counts.get(cat_key[0]) if cat_key and cat_member_counts
-                           else float(m.get("n_members", 0.0) or 0.0))
+                           else float(m.get("n_members", 0.0) or 0.0)) or 0.0
             new_basic = pooled_rate_per_member * cat_members
         else:
             new_basic = pooled_rate * cat_cover
@@ -2428,13 +2430,13 @@ def _po_buildup_education(df, pkey: str, assump, ctr,
     profit_rate = _resolved_priced_rate(ctr, "education", "profit_margin", profit_default)
     admin_rate  = _resolved_priced_rate(ctr, "education", "admin", admin_default)
 
-    tech_rows = [("Net Risk Premium", net_risk_tech, None)]
+    tech_rows: list[tuple[str, float, float | None]] = [("Net Risk Premium", net_risk_tech, None)]
     for label, engine_col in PO_TECH_ADDONS.get("education", []):
         tech_rows.append((label, _s(engine_col), None))
     tech_profit = net_risk_tech * profit_rate
     tech_rows.append(("Profit ", tech_profit, profit_rate))
 
-    basis_rows = [("Net Risk Premium", net_risk_basis, None)]
+    basis_rows: list[tuple[str, float, float | None]] = [("Net Risk Premium", net_risk_basis, None)]
     for label, engine_col in PO_TECH_ADDONS.get("education", []):
         basis_rows.append((label, _s(engine_col) * rate_basis, None))
     basis_profit = net_risk_basis * profit_rate

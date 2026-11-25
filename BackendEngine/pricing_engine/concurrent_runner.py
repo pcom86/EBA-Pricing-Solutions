@@ -5,6 +5,7 @@ import threading
 import time
 import traceback
 import uuid
+from collections.abc import Sequence
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
@@ -389,7 +390,7 @@ def _write_report_worker(job: ReportWriteJob) -> None:
             async_state.register_local_dir(str(local_dir), 0)
 
 
-def run_quotes_concurrent(ctr_paths: list[str | Path],
+def run_quotes_concurrent(ctr_paths: Sequence[str | Path],
                           basis: Any,
                           assump: Any,
                           out_dir: str | Path,

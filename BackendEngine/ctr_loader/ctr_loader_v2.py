@@ -308,7 +308,7 @@ _CATEGORY_SPLIT_SHEET_ORDER = ("gla", "gip", "tip", "fc")
 _CATEGORY_SPLIT_ROW_OFFSETS = (0, 1, 2, 3)
 
 
-def _read_product_options(ws) -> tuple[dict[str, bool], dict[str, str]]:
+def _read_product_options(ws) -> dict[str, bool]:
     express: dict[str, bool] = {}
     for i, pkey in enumerate(_PRODUCT_OPTION_ORDER):
         row = _PRODUCT_OPT_START_ROW + i
@@ -679,8 +679,8 @@ def _read_max_cover_caps(
     scheme: SchemeRecord,
     products: tuple[str, ...],
     active_categories: dict[str, tuple[int, ...]] | None = None,
-) -> dict[str, dict[int, float]]:
-    caps: dict[str, dict[int, float]] = {}
+) -> dict[str, dict[int, float | None]]:
+    caps: dict[str, dict[int, float | None]] = {}
 
     for pkey in products:
         spec = PRODUCT_REGISTRY[pkey]
@@ -692,7 +692,7 @@ def _read_max_cover_caps(
         if col is None:
             continue
 
-        product_caps: dict[int, float] = {}
+        product_caps: dict[int, float | None] = {}
         active_set = set(active_categories.get(pkey, ())) if active_categories else None
 
         for r in range(_MAX_COVER_ROW_START, min(_MAX_COVER_ROW_END, ws.nrows)):
@@ -900,7 +900,7 @@ def _load_catinput_section(wb, available, scheme, active_products, warnings, ws)
     spouse_use_sp_sheet = False
     express_over_gla: dict[str, bool] = {}
     category_split: dict[str, str] = {}
-    max_cover_per_category: dict[str, dict[int, float]] = {}
+    max_cover_per_category: dict[str, dict[int, float | None]] = {}
 
     if "CatInput-Save" in available:
         t = time.perf_counter()

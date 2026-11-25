@@ -360,13 +360,13 @@ def get(product_key: str) -> ProductSpec:
 def resolve_ci_mortality_table(ci_table_mapping: pl.DataFrame,
                                 product_option: str,
                                 variant: str) -> dict:
-    row = ci_table_mapping.filter(pl.col("product_option") == product_option)
-    if row.height == 0:
+    filtered = ci_table_mapping.filter(pl.col("product_option") == product_option)
+    if filtered.height == 0:
         raise KeyError(f"CI product_option '{product_option}' not in ci_table_mapping. "
                        f"Available: {sorted(ci_table_mapping['product_option'].unique().to_list())}")
-    row = row.row(0, named=True)
+    row_dict = filtered.row(0, named=True)
     col = "accelerator_table" if variant == "accelerator" else "standalone_table"
-    raw_name = str(row[col])
+    raw_name = str(row_dict[col])
     name = raw_name.lower()
     if name.endswith("_accelerator"):
         name = name[:-len("_accelerator")] + "_acc"
@@ -376,6 +376,6 @@ def resolve_ci_mortality_table(ci_table_mapping: pl.DataFrame,
         name = name + "_acc"
     return {
         "table_key": name,
-        "age_definition": row["age_definition"],
-        "variant_type": row["variant_type"],
+        "age_definition": row_dict["age_definition"],
+        "variant_type": row_dict["variant_type"],
     }

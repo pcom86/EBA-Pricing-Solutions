@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from datetime import date
 from typing import Any
@@ -79,7 +79,7 @@ def build_context(ctr, assump) -> PricingContext:
     threshold = assump.globals.get("scheme_size_large_threshold", 400)
     scheme_size = "Large" if member_count >= threshold else "Small"
 
-    limits = {}
+    limits: dict[Any, dict[str, Any]] = {}
     plims = assump.tables.get("product_limits")
     if plims is not None:
         for row in plims.iter_rows(named=True):
@@ -144,7 +144,7 @@ def _require_columns(df: pl.DataFrame, needed: Iterable[str], where: str) -> Non
         )
 
 
-_CO_ADDON_HANDLERS = {
+_CO_ADDON_HANDLERS: dict[str, Callable[..., pl.DataFrame]] = {
     "co_premium_gla":    co_premium_gla,
     "co_premium_lsdb":   co_premium_lsdb,
     "co_premium_spouse": co_premium_spouse,

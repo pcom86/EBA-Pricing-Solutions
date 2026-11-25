@@ -11,7 +11,7 @@ _NUMERIC = (
 
 class FastModel(QtCore.QAbstractTableModel):
 
-    def __init__(self, df: pl.DataFrame = None):
+    def __init__(self, df: pl.DataFrame | None = None):
         super().__init__()
         self._full = df if df is not None else pl.DataFrame()
         self._sort_col = None

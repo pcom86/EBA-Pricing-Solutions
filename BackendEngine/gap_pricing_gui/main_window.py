@@ -762,7 +762,7 @@ class GapWindow(QtWidgets.QMainWindow):
                     table.setRowHidden(r, False)
                     continue
                 hay = " ".join(
-                    (table.item(r, c).text() if table.item(r, c) else "")
+                    item.text() if (item := table.item(r, c)) is not None else ""
                     for c in range(table.columnCount())
                 ).lower()
                 table.setRowHidden(r, text not in hay)
@@ -851,7 +851,8 @@ class GapWindow(QtWidgets.QMainWindow):
         try:
             from .quote_runner import save_report
             p = save_report(self.result, write_xlsx=False, write_parquet=False, write_html=True)
-            self.status.showMessage(f"HTML report saved: {p.name}")
+            p_name = Path(p).name if p else "(no file)"
+            self.status.showMessage(f"HTML report saved: {p_name}")
             QtWidgets.QMessageBox.information(self, "Saved", f"HTML report written:\n{p}")
         except Exception as e:  # noqa: BLE001 - surface any save failure to the user
             self.status.showMessage("HTML save failed")
@@ -954,6 +955,7 @@ def run() -> int:
     win = GapWindow()
     win.show()
     if owns_app:
+        assert app is not None
         return app.exec()
     return 0
 

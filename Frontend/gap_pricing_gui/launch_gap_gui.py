@@ -90,6 +90,7 @@ def main() -> int:
     owns_app = app is None
     if owns_app:
         app = QtWidgets.QApplication(sys.argv)
+    assert app is not None
     app.setApplicationName("GAP Pricing Engine")
 
     from gap_pricing_gui.theme import apply_light_theme
@@ -106,7 +107,7 @@ def main() -> int:
         _log(f"GUI_READY_COLD_SECONDS={time.perf_counter() - _boot_t0:.2f}")
     _log("gap_pricing_gui window launched.")
 
-    app._gap_main_window = win
+    setattr(app, "_gap_main_window", win)  # noqa: B010 - dynamic attr read by integration tests
 
     if owns_app:
         restore_sigterm = _install_sigterm_handler(win, QtCore)

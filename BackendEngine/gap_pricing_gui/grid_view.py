@@ -45,7 +45,7 @@ def populate_table_from_grid(table: QtWidgets.QTableWidget, grid: GridSheet) -> 
                 "center": QtCore.Qt.AlignCenter,
                 "right": QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter,
             }
-            item.setTextAlignment(int(align_map.get(cell.align, QtCore.Qt.AlignLeft)))
+            item.setTextAlignment(int(align_map.get(cell.align) or QtCore.Qt.AlignLeft))
 
             table.setItem(r_idx, c_idx, item)
 

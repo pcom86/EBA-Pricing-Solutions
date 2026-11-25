@@ -68,7 +68,7 @@ class SchemeRecord:
 
     express_over_gla: dict[str, bool] = field(default_factory=dict)
     category_split: dict[str, str] = field(default_factory=dict)
-    max_cover_per_category: dict[str, dict[int, float]] = field(default_factory=dict)
+    max_cover_per_category: dict[str, dict[int, float | None]] = field(default_factory=dict)
     fc_max_no_of_spouses: dict[int, float] = field(default_factory=dict)
     fc_parents_included: dict[int, str] = field(default_factory=dict)
     fc_parents_in_law_included: dict[int, str] = field(default_factory=dict)
@@ -164,7 +164,7 @@ class SchemeRecord:
 
 @dataclass(frozen=True)
 class CTRBundle:
-    ctr_path: Path
+    ctr_path: Path | None
     ctr_fingerprint: str
     loaded_at: str
     scheme: SchemeRecord

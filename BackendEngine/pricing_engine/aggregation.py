@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import polars as pl
 
 PRODUCT_DISPLAY_NAMES = {
@@ -36,11 +38,11 @@ def _ensure_cols(df: pl.DataFrame) -> pl.DataFrame:
 
 
 def scheme_summary(all_results: dict[str, pl.DataFrame]) -> pl.DataFrame:
-    rows = []
+    rows: list[dict[str, Any]] = []
     for pkey, df in all_results.items():
         df = _ensure_cols(df)
         active = df.filter(pl.col("product_active"))
-        row = {
+        row: dict[str, Any] = {
             "product_key":   pkey,
             "product_name":  PRODUCT_DISPLAY_NAMES.get(pkey, pkey),
             "n_members":     active.height,
@@ -52,7 +54,7 @@ def scheme_summary(all_results: dict[str, pl.DataFrame]) -> pl.DataFrame:
 
     df = pl.DataFrame(rows)
 
-    grand = {
+    grand: dict[str, Any] = {
         "product_key":  "GRAND_TOTAL",
         "product_name": "GRAND TOTAL",
         "n_members":    None,

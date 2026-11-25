@@ -9,7 +9,7 @@ class GridCell:
     display: str
     bold: bool = False
     font_color: str = "000000"
-    fill: str = None
+    fill: str | None = None
     align: str = "left"
     bordered: bool = False
 

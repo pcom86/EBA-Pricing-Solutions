@@ -57,9 +57,9 @@ def apply_special_premium(df: pl.DataFrame,
     if kind == "fc_composite":
         return _apply_fc_composite(df, spec, basis_tables, assump_tables, ctx)
     if kind == "gip_composite":
-        return _apply_gip_composite(df, spec, basis_tables, assump_tables, ctx)
+        return _apply_gip_composite(df, spec, basis_tables, assump_tables or {}, ctx)
     if kind == "tip_composite":
-        return _apply_tip_composite(df, spec, basis_tables, assump_tables, ctx)
+        return _apply_tip_composite(df, spec, basis_tables, assump_tables or {}, ctx)
     if kind == "education_guardian_composite":
         return _apply_education_guardian_composite(df, spec, basis_tables, assump_tables, ctx)
     if kind == "educate_a_child_composite":

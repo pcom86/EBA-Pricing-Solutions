@@ -6,6 +6,10 @@ from typing import Any
 import polars as pl
 
 
+def _num(v: Any) -> float:
+    return float(v)
+
+
 def _tt_active(df: pl.DataFrame) -> pl.DataFrame:
     return df.filter(
         pl.col("product_active")
@@ -363,20 +367,20 @@ def product_aggregates(df: pl.DataFrame, scheme_params: dict,
     n_members = active.height
     n_over_nra = _over_nra_count(df)
     n_disabled = _disabled_count(df, product_key)
-    avg_age = float(_active_all["age"].mean()) if _active_all.height > 0 else 0.0
+    avg_age = _num(_active_all["age"].mean()) if _active_all.height > 0 else 0.0
     n_males = active.filter(pl.col("gender") == "M").height
     pct_males = (n_males / n_members) if n_members > 0 else 0.0
-    salary_bill = float(active["annual_salary"].sum())
+    salary_bill = _num(active["annual_salary"].sum())
     avg_salary = (salary_bill / n_members) if n_members > 0 else 0.0
-    aw_salary = (float((_active_all["age"] * _active_all["annual_salary"]).sum() / salary_bill)
+    aw_salary = (_num((_active_all["age"] * _active_all["annual_salary"]).sum()) / salary_bill
                  if salary_bill > 0 else 0.0)
-    total_cover = float(active["total_cover"].sum())
+    total_cover = _num(active["total_cover"].sum())
     avg_multiple = (total_cover / salary_bill) if salary_bill > 0 else 0.0
     avg_cover = (total_cover / n_members) if n_members > 0 else 0.0
-    aw_cover = (float((active["age"] * active["total_cover"]).sum() / total_cover)
+    aw_cover = (_num((active["age"] * active["total_cover"]).sum()) / total_cover
                 if total_cover > 0 else 0.0)
 
-    qx_weighted_sum = float(
+    qx_weighted_sum = _num(
         (active["basic_technical_premium"] + active["aids_technical_premium"]).sum()
     )
     basis_key = _basis_key_for_product(df, scheme_params)
@@ -456,7 +460,7 @@ def compute_eoh_row(product_key: str,
 def _max_cover(active: pl.DataFrame) -> float:
     if active.height == 0:
         return 0.0
-    return float(active["total_cover"].max())
+    return _num(active["total_cover"].max())
 
 
 def build_membership_block(all_results: dict[str, pl.DataFrame],
@@ -554,17 +558,17 @@ def _compute_aggregates_for_product(df: pl.DataFrame,
     n_members = active.height
     n_over_nra = _over_nra_count(df)
     n_disabled = _disabled_count(df, product_key)
-    avg_age = float(_active_all["age"].mean()) if _active_all.height > 0 else 0.0
+    avg_age = _num(_active_all["age"].mean()) if _active_all.height > 0 else 0.0
     n_males = active.filter(pl.col("gender") == "M").height
     pct_males = (n_males / n_members) if n_members > 0 else 0.0
-    salary_bill = float(active["annual_salary"].sum())
+    salary_bill = _num(active["annual_salary"].sum())
     avg_salary = (salary_bill / n_members) if n_members > 0 else 0.0
-    aw_salary = (float((_active_all["age"] * _active_all["annual_salary"]).sum() / salary_bill)
+    aw_salary = (_num((_active_all["age"] * _active_all["annual_salary"]).sum()) / salary_bill
                  if salary_bill > 0 else 0.0)
-    total_cover = float(active["total_cover"].sum())
+    total_cover = _num(active["total_cover"].sum())
     avg_multiple = (total_cover / salary_bill) if salary_bill > 0 else 0.0
     avg_cover = (total_cover / n_members) if n_members > 0 else 0.0
-    aw_cover = (float((active["age"] * active["total_cover"]).sum() / total_cover)
+    aw_cover = (_num((active["age"] * active["total_cover"]).sum()) / total_cover
                 if total_cover > 0 else 0.0)
 
     basis_multiplier = scheme_params.get("basis", {}).get(basis_key, 1.0)
@@ -673,8 +677,7 @@ def build_normal_margins_block(all_results: dict[str, pl.DataFrame],
             ctc_pct[pkey] = 0.0
             continue
         active = _tt_active(df)
-        net = float(active["basic_technical_premium"].sum()
-                    + active["aids_technical_premium"].sum())
+        net = _num(active["basic_technical_premium"].sum()) + _num(active["aids_technical_premium"].sum())
         co = float(active["co_premium"].sum()) if "co_premium" in active.columns else 0.0
         ctc = float(active["ctc_premium"].sum()) if "ctc_premium" in active.columns else 0.0
         co_pct[pkey] = (co / net) if net > 0 else 0.0
